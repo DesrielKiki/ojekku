@@ -38,7 +38,6 @@ class RideViewModel constructor(
 
     var rideTariff: String? = null
     var distance: String? = null
-
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

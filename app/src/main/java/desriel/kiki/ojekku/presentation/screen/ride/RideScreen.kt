@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.model.LatLng
@@ -51,7 +52,8 @@ fun RideScreen(
     saveStateHandle: SavedStateHandle?,
     viewModel: RideViewModel,
     onPickupClick: () -> Unit,
-    onDestinationClick: () -> Unit
+    onDestinationClick: () -> Unit,
+    onOrderButtonClick: () -> Unit
 ) {
 
     val locationPermissionState = rememberMultiplePermissionsState(
@@ -61,7 +63,7 @@ fun RideScreen(
         )
     )
 
-    val placesResult by saveStateHandle?.getStateFlow<PlacesModel>(PLACES_BUNDLE, PlacesModel())!!
+    val placesResult by saveStateHandle?.getStateFlow(PLACES_BUNDLE, PlacesModel())!!
         .collectAsState()
 
     var pickup by remember {
@@ -151,6 +153,7 @@ fun RideScreen(
 
                     OrderButton(
                         onClick = {
+                            onOrderButtonClick()
                             viewModel.saveHistory(
                                 formattedDateTime,
                                 formattedDateTime,
@@ -160,6 +163,7 @@ fun RideScreen(
                                 "",
                                 viewModel.rideTariff!!
                             )
+
                         },
                         distance = distance,
                         tariff = tariff,

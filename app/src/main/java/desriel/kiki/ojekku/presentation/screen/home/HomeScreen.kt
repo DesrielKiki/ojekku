@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -45,22 +48,29 @@ import java.time.format.DateTimeFormatter
 fun HomeScreen(
     onRideButtonClicked: () -> Unit,
     onCarButtonClicked: () -> Unit,
-    historyItemViewModel: HistoryItemViewModel
+    historyItemViewModel: HistoryItemViewModel,
+    homeViewModel: HomeViewModel,
+    onLogoutClick: () -> Unit,
+    onClickHistory: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
-        TextHeader(
-            headerText = "Selamat Datang, John Doe",
-            supportText = "Silahkan pilih layanan yang ingin anda gunakan"
-        )
+        Row {
+            TextHeader(
+                headerText = "Selamat Datang, John Doe",
+                supportText = "Silahkan pilih layanan yang ingin anda gunakan"
+            )
+
+        }
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         )
+
         Row(
             modifier = Modifier
                 .padding(vertical = 16.dp)
@@ -106,11 +116,10 @@ fun HomeScreen(
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp)
+                .padding(top = 8.dp, bottom = 8.dp)
         )
         Row(modifier = Modifier
-            .clickable { }
-            .padding(top = 8.dp)
+            .clickable { onClickHistory() }
             .align(alignment = CenterHorizontally)) {
 
             Text(text = "Riwayat Pesanan", style = MaterialTheme.typography.titleMedium)
@@ -122,26 +131,36 @@ fun HomeScreen(
                 modifier = Modifier.size(24.dp) // Ukuran ikon di sini
             )
         }
-        HistoryItemList(historyItemViewModel)
+        HistoryItemGrid(historyItemViewModel)
+        Icon(
+            painter = painterResource(id = R.drawable.ic_logout), // Ganti dengan ikon yang Anda inginkan
+            contentDescription = "ride",
+            tint = Color.Black,
+            modifier = Modifier
+                .size(48.dp)
+                .clickable {
+                    onLogoutClick()
+                    homeViewModel.logout()
+                } // Ukuran ikon di sini
+        )
 
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HistoryItemList(viewModel: HistoryItemViewModel) {
+fun HistoryItemGrid(viewModel: HistoryItemViewModel) {
     val historyItems by viewModel.historyItems.collectAsState()
 
     when (historyItems) {
         is HistoryUiState.ShowHistory -> {
             val context = LocalContext.current
-            Toast.makeText(context, "Data History Tersedia", Toast.LENGTH_LONG).show()
 
             val items = (historyItems as HistoryUiState.ShowHistory).historyItems
             LazyRow(
             ) {
                 items(items) { item ->
-                    HistoryItemCard(item)
+                    ItemHistoryGrid(item)
                 }
             }
         }
@@ -150,28 +169,34 @@ fun HistoryItemList(viewModel: HistoryItemViewModel) {
             val message = (historyItems as HistoryUiState.Error).message
             val context = LocalContext.current
 
-            Toast.makeText(context, "belum ada data history", Toast.LENGTH_LONG).show()
         }
 
         is HistoryUiState.Loading -> {
             val context = LocalContext.current
 
-            Toast.makeText(context, "Loading . . .", Toast.LENGTH_LONG).show()
 
         }
 
         else -> {}
     }
+
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HistoryItemCard(item: HistoryEntity) {
+fun ItemHistoryGrid(item: HistoryEntity) {
     Column(
         modifier = Modifier
             .width(172.dp)
             .padding(horizontal = 4.dp, vertical = 12.dp)
-            .background(color = Primary)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color(0xFF56ab2f), Color(0xFF00AA12))
+                ),
+                shape = RoundedCornerShape(12.dp) // Mengatur sudut lengkung di sini
+            )
+
+
     ) {
         Box(modifier = Modifier.size(width = 124.dp, height = 84.dp)) {
             Icon(
@@ -205,7 +230,11 @@ fun HistoryItemCard(item: HistoryEntity) {
                 .padding(start = 8.dp, end = 8.dp),
             style = MaterialTheme.typography.bodyMedium.copy(color = Color.White) // Ubah warna teks di sini
         )
-        Text(text = item.tariff, modifier = Modifier.padding(top = 4.dp).padding(horizontal = 8.dp))
+        Text(
+            text = item.tariff, modifier = Modifier
+                .padding(top = 4.dp, bottom = 8.dp)
+                .padding(horizontal = 8.dp)
+        )
     }
 
 }

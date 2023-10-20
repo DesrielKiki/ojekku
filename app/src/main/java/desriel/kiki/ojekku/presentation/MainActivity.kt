@@ -1,11 +1,16 @@
+@file:Suppress("NAME_SHADOWING")
+
 package desriel.kiki.ojekku.presentation
 
 import android.Manifest
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
@@ -26,19 +31,22 @@ import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.gson.Gson
+import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
 import desriel.kiki.ojekku.domain.model.EmptyStateModel
 import desriel.kiki.ojekku.domain.model.PlacesModel
 import desriel.kiki.ojekku.presentation.navigation.Route
-import desriel.kiki.ojekku.presentation.screen.car.CarScreen
 import desriel.kiki.ojekku.presentation.screen.car.CarViewModel
 import desriel.kiki.ojekku.presentation.screen.error.ErrorScreen
 import desriel.kiki.ojekku.presentation.screen.home.HistoryItemViewModel
 import desriel.kiki.ojekku.presentation.screen.home.HomeScreen
+import desriel.kiki.ojekku.presentation.screen.home.HomeViewModel
+import desriel.kiki.ojekku.presentation.screen.home.history.HistoryScreen
 import desriel.kiki.ojekku.presentation.screen.ride.RideScreen
 import desriel.kiki.ojekku.presentation.screen.login.LoginScreen
 import desriel.kiki.ojekku.presentation.screen.login.LoginViewModel
 import desriel.kiki.ojekku.presentation.screen.register.RegisterScreen
 import desriel.kiki.ojekku.presentation.screen.register.RegisterViewModel
+import desriel.kiki.ojekku.presentation.screen.ride.CarScreen
 import desriel.kiki.ojekku.presentation.screen.ride.RideViewModel
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PLACES_BUNDLE
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PickLocationBottomSheet
@@ -50,6 +58,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels { MainViewModel.Factory }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen().apply {
@@ -65,9 +74,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(
     ExperimentalMaterialNavigationApi::class,
-    ExperimentalPermissionsApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable
@@ -81,12 +90,6 @@ fun OjekkuApps(
     val bottomSheetNavigator = remember { BottomSheetNavigator(sheetState) }
     val navController = rememberNavController(bottomSheetNavigator)
     val isUserLoggedIn by viewModel.isUserLoggedIn.collectAsState()
-
-    val locationPermissionState = rememberMultiplePermissionsState(
-        listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
-        )
-    )
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator
@@ -137,6 +140,9 @@ fun OjekkuApps(
                         onPickupClick = {
                             navController.navigate("${Route.PickLocation.route}/true")
                         },
+                        onOrderButtonClick = {
+                            navController.navigate(Route.Home.route)
+                        },
                         onDestinationClick = {
                             navController.navigate("${Route.PickLocation.route}/false")
                         })
@@ -151,7 +157,7 @@ fun OjekkuApps(
                     CarScreen(
                         viewModel = viewModel,
                         saveStateHandle = saveStateHandle,
-                        locationPermissionState = locationPermissionState,
+                        onOrderClick = { navController.navigate(Route.Home.route) },
                         onPickupClick = {
                             navController.navigate("${Route.PickLocation.route}/true")
                         },
@@ -162,14 +168,36 @@ fun OjekkuApps(
                 composable(
                     route = Route.Home.route
                 ) {
-                    val viewModel: HistoryItemViewModel =
+                    val historyItemViewModel: HistoryItemViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryItemViewModel.Factory)
+                    val homeViewModel: HomeViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HomeViewModel.Factory)
 
                     HomeScreen(
                         onCarButtonClicked = { navController.navigate(Route.Car.route) },
                         onRideButtonClicked = { navController.navigate(Route.Ride.route) },
-                        historyItemViewModel = viewModel)
+                        historyItemViewModel = historyItemViewModel,
+                        homeViewModel = homeViewModel,
+                        onLogoutClick = {
+                            navController.navigate(Route.Login.route)
+                        },
+                        onClickHistory = {
+                            navController.navigate(Route.HistoryScreen.route)
+                        }
+
+                    )
                 }
+                bottomSheet(
+                    route = Route.HistoryScreen.route
+                ) {
+                    val historyItemViewModel: HistoryItemViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryItemViewModel.Factory)
+
+                    HistoryScreen(
+                        viewModel = historyItemViewModel, onClose = { navController.popBackStack() }
+                    )
+                }
+
                 bottomSheet(
                     route = "${Route.PickLocation.route}/{isToGetPickupLocation}",
                     arguments = listOf(
@@ -180,9 +208,10 @@ fun OjekkuApps(
                         backStackEntry.arguments?.getBoolean("isToGetPickupLocation") ?: true
                     val viewModel: PickLocationViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = PickLocationViewModel.Factory)
+
                     PickLocationBottomSheet(
-                        isToGetPickupLocation,
-                        viewModel,
+                        isToGetPickupLocation = isToGetPickupLocation,
+                        viewModel = viewModel,
                         onPlaceClick = { place, isPickupPlace ->
                             navController.previousBackStackEntry
                                 ?.savedStateHandle

@@ -1,6 +1,8 @@
-package desriel.kiki.ojekku.presentation.screen.car
+package desriel.kiki.ojekku.presentation.screen.ride
 
 import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -37,17 +38,23 @@ import desriel.kiki.ojekku.R
 import desriel.kiki.ojekku.domain.model.PlacesModel
 import desriel.kiki.ojekku.presentation.component.OrderButton
 import desriel.kiki.ojekku.presentation.component.PointField
+import desriel.kiki.ojekku.presentation.screen.car.CarUiState
+import desriel.kiki.ojekku.presentation.screen.car.CarViewModel
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PLACES_BUNDLE
 import desriel.kiki.ojekku.presentation.theme.Primary
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CarScreen(
-    locationPermissionState: MultiplePermissionsState,
     saveStateHandle: SavedStateHandle?,
     viewModel: CarViewModel,
     onPickupClick: () -> Unit,
-    onDestinationClick: () -> Unit
+    onDestinationClick: () -> Unit,
+    onOrderClick : () -> Unit
 ) {
 
     val locationPermissionState = rememberMultiplePermissionsState(
@@ -136,13 +143,31 @@ fun CarScreen(
                     onClickedEditButton = {}
                 )
             }
-            viewModel.carTariff?.let {tariff ->
+            viewModel.carTariff?.let { tariff ->
                 viewModel.distance?.let { distance ->
+                    var formattedDateTime by remember { mutableStateOf("") }
+
+                    val currentDateTime = LocalDateTime.now()
+                    val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm", Locale.US)
+
+                    formattedDateTime = currentDateTime.format(formatter)
+
                     OrderButton(
-                        onClick = {},
+                        onClick = {
+                            onOrderClick()
+                            viewModel.saveHistory(
+                                formattedDateTime,
+                                formattedDateTime,
+                                "Car",
+                                pickup.displayName,
+                                destination.displayName,
+                                "",
+                                viewModel.carTariff!!
+                            )
+                        },
                         distance = distance,
                         tariff = tariff,
-                        title = "Pesan Ojekku Car"
+                        title = "Pesan Ojekku Ride"
                     )
                 }
             }

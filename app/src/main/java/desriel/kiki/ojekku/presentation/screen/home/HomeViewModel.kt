@@ -8,14 +8,40 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import desriel.kiki.core.data.source.local.room.dao.UserDao
 import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
 import desriel.kiki.core.data.source.local.room.repository.HistoryRepository
+import desriel.kiki.core.domain.usecase.UserUseCase
 import desriel.kiki.ojekku.OjekkuApplication
 import desriel.kiki.ojekku.presentation.screen.car.CarViewModel
+import desriel.kiki.ojekku.presentation.screen.login.LoginViewModel
 import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class HistoryItemViewModel(private val repository: HistoryRepository) : ViewModel() {
+class HomeViewModel constructor(
+    private val userUseCase: UserUseCase
+
+):ViewModel(){
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as OjekkuApplication)
+                HomeViewModel(
+                    application.ojekkuContainer.userUseCase
+                )
+            }
+        }
+    }
+    fun logout() {
+        viewModelScope.launch {
+            userUseCase.logout()
+        }
+    }
+
+}
+class HistoryItemViewModel constructor(
+    private val repository: HistoryRepository
+) : ViewModel() {
     val historyItems: StateFlow<HistoryUiState> = repository.allHistoryItems
         .map { historyItems ->
             if (historyItems.isNotEmpty()) {

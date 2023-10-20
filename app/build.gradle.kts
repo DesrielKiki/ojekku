@@ -77,6 +77,7 @@ dependencies {
     implementation(project(":core"))
     implementation(libs.lottie)
     implementation(libs.gson)
+
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))

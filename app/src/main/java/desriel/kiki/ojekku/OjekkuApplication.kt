@@ -10,11 +10,6 @@ class OjekkuApplication : Application() {
 
     lateinit var ojekkuContainer : OjekkuContainer
 
-    val appDatabase by lazy {
-        Room.databaseBuilder(this, OjekkuDatabase::class.java, "my-database-name")
-            .build()
-    }
-
     override fun onCreate() {
         super.onCreate()
         ojekkuContainer = OjekkuContainerImpl(context = applicationContext)

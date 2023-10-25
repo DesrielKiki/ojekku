@@ -10,4 +10,6 @@ sealed class Route(val route : String){
     object PickLocation : Route ("pick-location")
     object Error: Route("error")
     object HistoryScreen : Route ("history")
+    object Profile : Route("Profile")
+    object Notification : Route ("Notification")
 }

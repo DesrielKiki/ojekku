@@ -28,7 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.model.LatLng
@@ -39,6 +38,8 @@ import desriel.kiki.ojekku.R
 import desriel.kiki.ojekku.domain.model.PlacesModel
 import desriel.kiki.ojekku.presentation.component.OrderButton
 import desriel.kiki.ojekku.presentation.component.PointField
+import desriel.kiki.ojekku.presentation.screen.home.HistoryItemViewModel
+import desriel.kiki.ojekku.presentation.screen.home.HomeViewModel
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PLACES_BUNDLE
 import desriel.kiki.ojekku.presentation.theme.Primary
 import java.time.LocalDateTime
@@ -50,7 +51,8 @@ import java.util.Locale
 @Composable
 fun RideScreen(
     saveStateHandle: SavedStateHandle?,
-    viewModel: RideViewModel,
+    rideViewModel: RideViewModel,
+    historyViewmodel: HistoryItemViewModel,
     onPickupClick: () -> Unit,
     onDestinationClick: () -> Unit,
     onOrderButtonClick: () -> Unit
@@ -76,7 +78,7 @@ fun RideScreen(
         mutableStateListOf<LatLng>()
     }
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by rideViewModel.uiState.collectAsState()
 
     LaunchedEffect(placesResult) {
         if (placesResult.locationName.isNotEmpty()) {
@@ -90,7 +92,7 @@ fun RideScreen(
 
     LaunchedEffect(pickup, destination) {
         if (pickup.locationName.isNotEmpty() && destination.locationName.isNotEmpty()) {
-            viewModel.getPlaceRoutes(
+            rideViewModel.getPlaceRoutes(
                 Pair(pickup.latitude, pickup.longitude),
                 Pair(destination.latitude, destination.longitude)
             )
@@ -142,8 +144,8 @@ fun RideScreen(
                     onClickedEditButton = {}
                 )
             }
-            viewModel.rideTariff?.let { tariff ->
-                viewModel.distance?.let { distance ->
+            rideViewModel.rideTariff?.let { tariff ->
+                rideViewModel.distance?.let { distance ->
                     var formattedDateTime by remember { mutableStateOf("") }
 
                     val currentDateTime = LocalDateTime.now()
@@ -154,14 +156,15 @@ fun RideScreen(
                     OrderButton(
                         onClick = {
                             onOrderButtonClick()
-                            viewModel.saveHistory(
+                            rideViewModel.saveHistory(
+                                historyViewmodel.getUserEmail(),
                                 formattedDateTime,
                                 formattedDateTime,
                                 "Ride",
                                 pickup.displayName,
                                 destination.displayName,
                                 "",
-                                viewModel.rideTariff!!
+                                rideViewModel.rideTariff!!
                             )
 
                         },

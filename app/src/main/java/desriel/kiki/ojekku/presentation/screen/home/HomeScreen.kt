@@ -1,7 +1,7 @@
 package desriel.kiki.ojekku.presentation.screen.home
 
 import android.os.Build
-import android.widget.Toast
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,22 +26,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import desriel.kiki.core.data.source.Resource
 import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
 import desriel.kiki.ojekku.R
 import desriel.kiki.ojekku.presentation.component.CircularIconButton
 import desriel.kiki.ojekku.presentation.component.TextHeader
-import desriel.kiki.ojekku.presentation.theme.Primary
-import java.time.format.DateTimeFormatter
+import desriel.kiki.ojekku.presentation.screen.login.LoginViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -49,10 +48,14 @@ fun HomeScreen(
     onRideButtonClicked: () -> Unit,
     onCarButtonClicked: () -> Unit,
     historyItemViewModel: HistoryItemViewModel,
-    homeViewModel: HomeViewModel,
-    onLogoutClick: () -> Unit,
-    onClickHistory: () -> Unit
+    onClickHistory: () -> Unit,
+    loginViewModel: LoginViewModel
 ) {
+
+    val usernameState by remember { loginViewModel.getUserName() }
+    Log.d("home screen", "usernamestate = $usernameState")
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,7 +63,7 @@ fun HomeScreen(
     ) {
         Row {
             TextHeader(
-                headerText = "Selamat Datang, John Doe",
+                headerText = "Selamat Datang, $usernameState",
                 supportText = "Silahkan pilih layanan yang ingin anda gunakan"
             )
 
@@ -132,17 +135,13 @@ fun HomeScreen(
             )
         }
         HistoryItemGrid(historyItemViewModel)
-        Icon(
-            painter = painterResource(id = R.drawable.ic_logout), // Ganti dengan ikon yang Anda inginkan
-            contentDescription = "ride",
-            tint = Color.Black,
+        Divider(
             modifier = Modifier
-                .size(48.dp)
-                .clickable {
-                    onLogoutClick()
-                    homeViewModel.logout()
-                } // Ukuran ikon di sini
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 8.dp)
         )
+
+
 
     }
 }
@@ -150,33 +149,27 @@ fun HomeScreen(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HistoryItemGrid(viewModel: HistoryItemViewModel) {
-    val historyItems by viewModel.historyItems.collectAsState()
+    val historyData by viewModel.getUserHistoryForCurrentUser().collectAsState(initial = Resource.Loading)
 
-    when (historyItems) {
-        is HistoryUiState.ShowHistory -> {
-            val context = LocalContext.current
+    when (historyData) {
+        is Resource.Success -> {
+            val historyEntity = (historyData as Resource.Success<HistoryEntity>).data
+            Log.d("home screen", "history items = $historyEntity")
 
-            val items = (historyItems as HistoryUiState.ShowHistory).historyItems
-            LazyRow(
-            ) {
-                items(items) { item ->
-                    ItemHistoryGrid(item)
+            if (historyEntity != null) { // Periksa apakah historyEntity tidak null
+                LazyRow {
+                    items(listOf(historyEntity)) { item ->
+                        ItemHistoryGrid(item)
+                    }
                 }
             }
         }
-
-        is HistoryUiState.Error -> {
-            val message = (historyItems as HistoryUiState.Error).message
-            val context = LocalContext.current
-
+        is Resource.Error -> {
+            // Tampilkan pesan kesalahan jika diperlukan
         }
-
-        is HistoryUiState.Loading -> {
-            val context = LocalContext.current
-
-
+        is Resource.Loading -> {
+            // Tampilkan indikator loading jika diperlukan
         }
-
         else -> {}
     }
 

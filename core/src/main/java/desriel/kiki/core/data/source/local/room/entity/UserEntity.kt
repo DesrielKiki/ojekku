@@ -18,7 +18,10 @@ data class UserEntity(
   val password: String,
 
   @ColumnInfo(name = "full_name")
-  val name: String,
+  val fullName: String,
+
+  @ColumnInfo(name = "user_name")
+  val userName: String,
 
   @ColumnInfo(name = "phone_number")
   val phoneNumber: String
@@ -27,6 +30,7 @@ data class UserEntity(
 fun UserEntity.toDomain() = User (
   this.email,
   this.password,
-  this.name,
+  this.fullName,
+  this.userName,
   this.phoneNumber
 )

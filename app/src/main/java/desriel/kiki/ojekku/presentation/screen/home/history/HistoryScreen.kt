@@ -1,27 +1,16 @@
 package desriel.kiki.ojekku.presentation.screen.home.history
 
-import android.content.res.Resources.Theme
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,21 +20,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import com.google.android.gms.maps.model.Circle
+import desriel.kiki.core.data.source.Resource
 import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
 import desriel.kiki.ojekku.R
 import desriel.kiki.ojekku.presentation.screen.home.HistoryItemViewModel
 import desriel.kiki.ojekku.presentation.screen.home.HistoryUiState
-import desriel.kiki.ojekku.presentation.screen.home.HomeViewModel
 import desriel.kiki.ojekku.presentation.theme.Label
 import desriel.kiki.ojekku.presentation.theme.Primary
 
@@ -82,32 +66,26 @@ fun HistoryScreen(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HistoryItemList(viewModel: HistoryItemViewModel) {
-    val historyItems by viewModel.historyItems.collectAsState()
+    val historyData by viewModel.getUserHistoryForCurrentUser().collectAsState(initial = Resource.Loading)
 
-    when (historyItems) {
-        is HistoryUiState.ShowHistory -> {
-            val context = LocalContext.current
+    when (historyData) {
+        is Resource.Success -> {
+            val historyEntity = (historyData as Resource.Success<HistoryEntity>).data
 
-            val items = (historyItems as HistoryUiState.ShowHistory).historyItems
-            LazyColumn {
-                items(items) { item ->
-                    ItemHistoryList(item)
+            if (historyEntity != null) { // Periksa apakah historyEntity tidak null
+                LazyColumn {
+                    items(listOf(historyEntity)) { item ->
+                        ItemHistoryList(item)
+                    }
                 }
             }
         }
-
-        is HistoryUiState.Error -> {
-            val message = (historyItems as HistoryUiState.Error).message
-            val context = LocalContext.current
-
+        is Resource.Error -> {
+            // Tampilkan pesan kesalahan jika diperlukan
         }
-
-        is HistoryUiState.Loading -> {
-            val context = LocalContext.current
-
-
+        is Resource.Loading -> {
+            // Tampilkan indikator loading jika diperlukan
         }
-
         else -> {}
     }
 }
@@ -188,6 +166,7 @@ fun ListHistoryPrev() {
     ItemHistoryList(
         item = HistoryEntity(
             0L,
+            "",
             "",
             "",
             "Ride",

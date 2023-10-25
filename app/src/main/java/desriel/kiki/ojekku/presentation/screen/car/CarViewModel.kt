@@ -10,6 +10,7 @@ import desriel.kiki.core.data.source.Resource
 import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
 import desriel.kiki.core.data.source.local.room.repository.HistoryRepository
 import desriel.kiki.core.domain.usecase.PlacesUseCase
+import desriel.kiki.core.domain.usecase.UserUseCase
 import desriel.kiki.ojekku.OjekkuApplication
 import desriel.kiki.ojekku.presentation.screen.home.HistoryUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,7 +25,7 @@ import java.util.Locale
 
 class CarViewModel constructor(
     private val placesUseCase: PlacesUseCase,
-    private val repository: HistoryRepository
+    private val userUseCase: UserUseCase
 ) : ViewModel() {
 
 
@@ -43,16 +44,10 @@ class CarViewModel constructor(
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as OjekkuApplication)
-                val appDatabase =
-                    application.appDatabase // Sesuaikan dengan cara Anda menginisialisasi AppDatabase
-
-                val userDao = appDatabase.userDao()
-                val historyRepository = HistoryRepository(userDao)
 
                 CarViewModel(
                     application.ojekkuContainer.placesUseCase,
-                    historyRepository
-
+                    application.ojekkuContainer.userUseCase
                 )
             }
         }
@@ -133,6 +128,7 @@ class CarViewModel constructor(
                 val historyItem = HistoryEntity(
                     0L,
                     orderTime,
+                    "",
                     finishTime,
                     orderType,
                     pickLocation,
@@ -140,7 +136,7 @@ class CarViewModel constructor(
                     description,
                     tariff
                 )
-                repository.insertHistory(historyItem)
+                userUseCase.storeHistory(historyItem)
                 _historyUiState.emit(HistoryUiState.Success(historyItem))
             } catch (e: Exception) {
                 _historyUiState.emit(HistoryUiState.Error(e.message ?: "Gagal menyimpan riwayat."))

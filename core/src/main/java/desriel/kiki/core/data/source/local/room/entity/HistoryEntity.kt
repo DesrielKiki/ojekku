@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter
 @Entity(tableName = "history_table")
 data class HistoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val userEmail : String,
     val orderTime : String,
     val finishTime  : String,
     val orderType : String,

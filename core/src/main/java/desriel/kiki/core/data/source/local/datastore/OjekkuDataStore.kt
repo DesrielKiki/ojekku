@@ -31,8 +31,18 @@ class OjekkuDataStore constructor(
     get() = context.dataStore.data.map { pref ->
       pref[EMAIL] ?: ""
     }
+  val userName: Flow<String>
+    get() = context.dataStore.data.map { pref ->
+      pref[UNAME] ?: ""
+    }
+  val fullName: Flow<String>
+    get() = context.dataStore.data.map { pref ->
+      pref[FULLNAME] ?: ""
+    }
 
   companion object {
     val EMAIL = stringPreferencesKey("EMAIL")
+    val UNAME = stringPreferencesKey("UNAME")
+    val FULLNAME = stringPreferencesKey("FULLNAME")
   }
 }

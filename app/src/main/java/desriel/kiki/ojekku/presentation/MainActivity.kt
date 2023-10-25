@@ -2,22 +2,41 @@
 
 package desriel.kiki.ojekku.presentation
 
-import android.Manifest
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -28,10 +47,7 @@ import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.gson.Gson
-import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
 import desriel.kiki.ojekku.domain.model.EmptyStateModel
 import desriel.kiki.ojekku.domain.model.PlacesModel
 import desriel.kiki.ojekku.presentation.navigation.Route
@@ -39,11 +55,13 @@ import desriel.kiki.ojekku.presentation.screen.car.CarViewModel
 import desriel.kiki.ojekku.presentation.screen.error.ErrorScreen
 import desriel.kiki.ojekku.presentation.screen.home.HistoryItemViewModel
 import desriel.kiki.ojekku.presentation.screen.home.HomeScreen
-import desriel.kiki.ojekku.presentation.screen.home.HomeViewModel
 import desriel.kiki.ojekku.presentation.screen.home.history.HistoryScreen
 import desriel.kiki.ojekku.presentation.screen.ride.RideScreen
 import desriel.kiki.ojekku.presentation.screen.login.LoginScreen
 import desriel.kiki.ojekku.presentation.screen.login.LoginViewModel
+import desriel.kiki.ojekku.presentation.screen.notification.NotificationScreen
+import desriel.kiki.ojekku.presentation.screen.profile.ProfileScreen
+import desriel.kiki.ojekku.presentation.screen.profile.ProfileViewModel
 import desriel.kiki.ojekku.presentation.screen.register.RegisterScreen
 import desriel.kiki.ojekku.presentation.screen.register.RegisterViewModel
 import desriel.kiki.ojekku.presentation.screen.ride.CarScreen
@@ -53,11 +71,18 @@ import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PickLocationBo
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PickLocationViewModel
 import desriel.kiki.ojekku.presentation.theme.OjekkuTheme
 
+data class BottomNavigationItem(
+    val title: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector
+)
+
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels { MainViewModel.Factory }
 
 
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,9 +96,11 @@ class MainActivity : ComponentActivity() {
                 OjekkuApps(viewModel)
             }
         }
+
     }
 }
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(
     ExperimentalMaterialNavigationApi::class,
@@ -90,6 +117,57 @@ fun OjekkuApps(
     val bottomSheetNavigator = remember { BottomSheetNavigator(sheetState) }
     val navController = rememberNavController(bottomSheetNavigator)
     val isUserLoggedIn by viewModel.isUserLoggedIn.collectAsState()
+
+    val navigationItem = listOf(
+        BottomNavigationItem("Home", Icons.Filled.Home, Icons.Outlined.Home),
+        BottomNavigationItem(
+            "Notification",
+            Icons.Filled.Notifications,
+            Icons.Outlined.Notifications
+        ),
+        BottomNavigationItem("Profile", Icons.Filled.Person, Icons.Outlined.Person),
+
+        )
+
+    var selectedItemIndex by rememberSaveable {
+        mutableStateOf(0)
+    }
+
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colors.background
+    ) {
+        Scaffold(bottomBar = {
+            NavigationBar {
+                navigationItem.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        selected = selectedItemIndex == index,
+                        onClick = {
+                            selectedItemIndex = index
+                            when (item.title) {
+                                "Home" -> navController.navigate(Route.Home.route)
+                                "Profile" -> navController.navigate(Route.Profile.route)
+                                "Notification" -> navController.navigate(Route.Notification.route)
+                            }
+                        },
+                        label = {
+                            Text(text = item.title)
+                        },
+                        alwaysShowLabel = false,
+                        icon = {
+                            Icon(
+                                imageVector = if (index == selectedItemIndex) {
+                                    item.selectedIcon
+                                } else item.unselectedIcon,
+                                contentDescription = item.title
+                            )
+                        })
+                }
+            }
+        }) {
+
+        }
+    }
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator
@@ -115,6 +193,19 @@ fun OjekkuApps(
                         })
                 }
                 composable(
+                    route = Route.Profile.route
+                ) {
+                    val profileViewModel: ProfileViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = ProfileViewModel.Factory)
+
+                    ProfileScreen(
+                        profileViewModel = profileViewModel,
+                        onLogoutClick = {
+                            navController.navigate(Route.Login.route)
+                        },
+                    )
+                }
+                composable(
                     route = Route.Register.route
                 ) {
                     val viewModel: RegisterViewModel =
@@ -130,12 +221,14 @@ fun OjekkuApps(
                 composable(
                     route = Route.Ride.route
                 ) {
-                    val viewModel: RideViewModel =
+                    val rideViewModel: RideViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = RideViewModel.Factory)
+                    val historyVIewmodel: HistoryItemViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryItemViewModel.Factory)
                     val saveStateHandle = navController.currentBackStackEntry?.savedStateHandle
 
                     RideScreen(
-                        viewModel = viewModel,
+                        rideViewModel = rideViewModel,
                         saveStateHandle = saveStateHandle,
                         onPickupClick = {
                             navController.navigate("${Route.PickLocation.route}/true")
@@ -145,7 +238,14 @@ fun OjekkuApps(
                         },
                         onDestinationClick = {
                             navController.navigate("${Route.PickLocation.route}/false")
-                        })
+                        },
+                        historyViewmodel = historyVIewmodel
+                        )
+                }
+                composable(
+                    route = Route.Notification.route
+                ) {
+                    NotificationScreen()
                 }
                 composable(
                     route = Route.Car.route
@@ -170,20 +270,17 @@ fun OjekkuApps(
                 ) {
                     val historyItemViewModel: HistoryItemViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryItemViewModel.Factory)
-                    val homeViewModel: HomeViewModel =
-                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HomeViewModel.Factory)
+                    val loginViewModel: LoginViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = LoginViewModel.Factory)
 
                     HomeScreen(
                         onCarButtonClicked = { navController.navigate(Route.Car.route) },
                         onRideButtonClicked = { navController.navigate(Route.Ride.route) },
                         historyItemViewModel = historyItemViewModel,
-                        homeViewModel = homeViewModel,
-                        onLogoutClick = {
-                            navController.navigate(Route.Login.route)
-                        },
                         onClickHistory = {
                             navController.navigate(Route.HistoryScreen.route)
-                        }
+                        },
+                        loginViewModel = loginViewModel
 
                     )
                 }

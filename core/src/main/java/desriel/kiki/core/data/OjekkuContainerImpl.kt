@@ -53,7 +53,7 @@ class OjekkuContainerImpl constructor(
     get() = AuthRepositoryImpl(ojekkuDatabase.userDao())
 
   override val userRepository: UserRepository
-    get() = UserRepositoryImpl(ojekkuDataStore)
+    get() = UserRepositoryImpl(ojekkuDataStore, ojekkuDatabase.userDao())
 
   override val placesRepository: PlacesRepository
     get() = PlacesRepositoryImpl(jekyApiService)
@@ -62,7 +62,7 @@ class OjekkuContainerImpl constructor(
     get() = AuthInteractor(authRepository)
 
   override val userUseCase: UserUseCase
-    get() = UserInteractor(userRepository)
+    get() = UserInteractor(userRepository, ojekkuDatabase.userDao())
 
   override val placesUseCase: PlacesUseCase
     get() = PlacesInteractor(placesRepository)

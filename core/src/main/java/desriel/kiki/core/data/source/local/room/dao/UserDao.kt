@@ -23,11 +23,10 @@ interface UserDao {
   /**
    get function
    */
-  @Query("SELECT * FROM history_table")
-  fun getAllHistoryItems(): Flow<List<HistoryEntity>>
-
   @Query("SELECT * FROM user WHERE email = :email AND password = :password")
   fun getUserByEmailAndPassword(email: String, password: String): Flow<List<UserEntity>>
+  @Query("SELECT * FROM history_table WHERE userEmail = :userEmail")
+  fun getUserHistory(userEmail: String): Flow<List<HistoryEntity>>
 
 
 }

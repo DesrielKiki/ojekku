@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import desriel.kiki.core.domain.model.User
 import desriel.kiki.ojekku.R
 import desriel.kiki.ojekku.domain.model.EmptyStateModel
@@ -38,7 +37,6 @@ import desriel.kiki.ojekku.presentation.component.PasswordTextField
 import desriel.kiki.ojekku.presentation.component.PlainTextField
 import desriel.kiki.ojekku.presentation.component.TextHeader
 import desriel.kiki.ojekku.presentation.component.TrailingTextField
-import desriel.kiki.ojekku.presentation.navigation.Route
 import desriel.kiki.ojekku.presentation.theme.Black
 import desriel.kiki.ojekku.presentation.theme.Primary
 
@@ -49,7 +47,10 @@ fun RegisterScreen(
     onNavigateToHome: () -> Unit,
     onRegisterError: (EmptyStateModel) -> Unit
 ) {
-    var name by remember {
+    var fullName by remember {
+        mutableStateOf("")
+    }
+    var userName by remember {
         mutableStateOf("")
     }
     var number by remember {
@@ -80,7 +81,8 @@ fun RegisterScreen(
     val uiState by viewModel.registerUiState.collectAsState(initial = RegisterUiState.Idle)
     val isButtonEnable by remember {
         derivedStateOf {
-            name.trim().isNotEmpty() &&
+            fullName.trim().isNotEmpty() &&
+                    userName.trim().isNotEmpty()&&
                     number.trim().isNotEmpty() &&
                     email.trim().isNotEmpty() &&
                     password.trim().isNotEmpty() &&
@@ -93,9 +95,11 @@ fun RegisterScreen(
             is RegisterUiState.Loading -> {
 
             }
+
             is RegisterUiState.Success -> {
                 onNavigateBack.invoke()
             }
+
             is RegisterUiState.Error -> {
                 onRegisterError.invoke(
                     EmptyStateModel(
@@ -106,6 +110,7 @@ fun RegisterScreen(
                     )
                 )
             }
+
             else -> Unit
         }
     }
@@ -125,9 +130,15 @@ fun RegisterScreen(
         PlainTextField(
             modifier = Modifier.padding(top = 36.dp),
             label = "Nama Lengkap",
-            value = name,
+            value = fullName,
             placeholder = "Nama Lengkap Anda",
-            onValueChange = { name = it })
+            onValueChange = { fullName = it })
+        PlainTextField(
+            modifier = Modifier.padding(top = 36.dp),
+            label = "Display Name",
+            value = userName,
+            placeholder = "Display Name Anda",
+            onValueChange = { userName = it })
         PlainTextField(
             modifier = Modifier.padding(top = 24.dp),
             label = "No. HP",
@@ -173,7 +184,7 @@ fun RegisterScreen(
             enabled = isButtonEnable,
             onClick = {
                 viewModel.register(
-                    User(email, password, name, number)
+                    User(email, password, fullName,userName, number,)
                 )
             }
         )

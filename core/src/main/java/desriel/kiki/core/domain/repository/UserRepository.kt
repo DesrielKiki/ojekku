@@ -18,7 +18,7 @@ interface UserRepository {
     suspend fun getFullName(): Flow<Resource<String>>
     suspend fun getUserEmail(): Flow<Resource<String>>
 
-    fun getUserHistory(userEmail: String): Flow<Resource<HistoryEntity>>
+    fun getUserHistory(userEmail: String): Flow<Resource<List<HistoryEntity>>>
 
 
     suspend fun logout()

@@ -29,7 +29,7 @@ abstract class OjekkuDatabase: RoomDatabase() {
           val dbBuilder = Room.databaseBuilder(
             context.applicationContext,
             OjekkuDatabase::class.java,
-            "jeky.database"
+            "ojekku_database"
           )
             .fallbackToDestructiveMigration()
 

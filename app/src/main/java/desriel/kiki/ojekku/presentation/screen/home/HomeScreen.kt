@@ -3,9 +3,11 @@ package desriel.kiki.ojekku.presentation.screen.home
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,8 +34,8 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import desriel.kiki.core.data.source.Resource
 import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
@@ -47,7 +49,7 @@ import desriel.kiki.ojekku.presentation.screen.login.LoginViewModel
 fun HomeScreen(
     onRideButtonClicked: () -> Unit,
     onCarButtonClicked: () -> Unit,
-    historyItemViewModel: HistoryItemViewModel,
+    historyViewModel: HistoryViewModel,
     onClickHistory: () -> Unit,
     loginViewModel: LoginViewModel
 ) {
@@ -134,7 +136,7 @@ fun HomeScreen(
                 modifier = Modifier.size(24.dp) // Ukuran ikon di sini
             )
         }
-        HistoryItemGrid(historyItemViewModel)
+        HistoryItemGrid(historyViewModel)
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
@@ -142,34 +144,52 @@ fun HomeScreen(
         )
 
 
-
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HistoryItemGrid(viewModel: HistoryItemViewModel) {
-    val historyData by viewModel.getUserHistoryForCurrentUser().collectAsState(initial = Resource.Loading)
+fun HistoryItemGrid(viewModel: HistoryViewModel) {
+    val historyData by viewModel.getUserHistoryForCurrentUser()
+        .collectAsState(initial = Resource.Loading)
 
     when (historyData) {
         is Resource.Success -> {
-            val historyEntity = (historyData as Resource.Success<HistoryEntity>).data
+            val historyEntity = (historyData as Resource.Success<List<HistoryEntity>>).data
             Log.d("home screen", "history items = $historyEntity")
 
-            if (historyEntity != null) { // Periksa apakah historyEntity tidak null
-                LazyRow {
-                    items(listOf(historyEntity)) { item ->
-                        ItemHistoryGrid(item)
-                    }
+            LazyRow {
+                items(historyEntity) { item ->
+                    ItemHistoryGrid(item)
                 }
             }
         }
+
         is Resource.Error -> {
-            // Tampilkan pesan kesalahan jika diperlukan
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                horizontalAlignment = CenterHorizontally, // Mengatur konten di tengah horizontal
+                verticalArrangement = Arrangement.Center // Mengatur konten di tengah vertical
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(128.dp),
+                    painter = painterResource(id = R.drawable.ic_activity),
+                    contentDescription = "no history"
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center, // Mengatur teks agar terpusat
+                    text = "Belum ada history \n yang tersedia"
+                )
+            }
         }
+
         is Resource.Loading -> {
-            // Tampilkan indikator loading jika diperlukan
+
         }
+
         else -> {}
     }
 

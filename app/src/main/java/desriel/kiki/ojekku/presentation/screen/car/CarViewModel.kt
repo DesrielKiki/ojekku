@@ -113,6 +113,7 @@ class CarViewModel constructor(
         return format.format(amount).replace("IDR", "Rp.").replace(",00", ",-")
     }
     fun saveHistory(
+        userEmail : String,
         orderTime : String,
         finishTime  : String,
         orderType : String,
@@ -127,8 +128,8 @@ class CarViewModel constructor(
             try {
                 val historyItem = HistoryEntity(
                     0L,
+                    userEmail,
                     orderTime,
-                    "",
                     finishTime,
                     orderType,
                     pickLocation,
@@ -137,7 +138,6 @@ class CarViewModel constructor(
                     tariff
                 )
                 userUseCase.storeHistory(historyItem)
-                _historyUiState.emit(HistoryUiState.Success(historyItem))
             } catch (e: Exception) {
                 _historyUiState.emit(HistoryUiState.Error(e.message ?: "Gagal menyimpan riwayat."))
             }

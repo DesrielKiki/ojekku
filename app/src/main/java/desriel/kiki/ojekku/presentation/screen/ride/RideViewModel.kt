@@ -34,8 +34,6 @@ class RideViewModel constructor(
     val uiState: StateFlow<RideUiState> get() = _uiState.asStateFlow()
 
     private val _historyUiState = MutableSharedFlow<HistoryUiState>()
-    val historyUiState get() = _historyUiState.asSharedFlow()
-
 
     var rideTariff: String? = null
     var distance: String? = null
@@ -138,7 +136,6 @@ class RideViewModel constructor(
                     tariff
                 )
                 userUseCase.storeHistory(historyItem)
-                _historyUiState.emit(HistoryUiState.Success(historyItem))
             } catch (e: Exception) {
                 _historyUiState.emit(HistoryUiState.Error(e.message ?: "Gagal menyimpan riwayat."))
             }

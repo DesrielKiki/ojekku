@@ -53,7 +53,7 @@ import desriel.kiki.ojekku.domain.model.PlacesModel
 import desriel.kiki.ojekku.presentation.navigation.Route
 import desriel.kiki.ojekku.presentation.screen.car.CarViewModel
 import desriel.kiki.ojekku.presentation.screen.error.ErrorScreen
-import desriel.kiki.ojekku.presentation.screen.home.HistoryItemViewModel
+import desriel.kiki.ojekku.presentation.screen.home.HistoryViewModel
 import desriel.kiki.ojekku.presentation.screen.home.HomeScreen
 import desriel.kiki.ojekku.presentation.screen.home.history.HistoryScreen
 import desriel.kiki.ojekku.presentation.screen.ride.RideScreen
@@ -99,6 +99,7 @@ class MainActivity : ComponentActivity() {
 
     }
 }
+
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -223,8 +224,8 @@ fun OjekkuApps(
                 ) {
                     val rideViewModel: RideViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = RideViewModel.Factory)
-                    val historyVIewmodel: HistoryItemViewModel =
-                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryItemViewModel.Factory)
+                    val historyVIewmodel: HistoryViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryViewModel.Factory)
                     val saveStateHandle = navController.currentBackStackEntry?.savedStateHandle
 
                     RideScreen(
@@ -252,15 +253,18 @@ fun OjekkuApps(
                 ) {
                     val viewModel: CarViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = CarViewModel.Factory)
+                    val historyViewModel: HistoryViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryViewModel.Factory)
                     val saveStateHandle = navController.currentBackStackEntry?.savedStateHandle
 
                     CarScreen(
-                        viewModel = viewModel,
+                        carViewModel = viewModel,
                         saveStateHandle = saveStateHandle,
                         onOrderClick = { navController.navigate(Route.Home.route) },
                         onPickupClick = {
                             navController.navigate("${Route.PickLocation.route}/true")
                         },
+                        historyViewModel = historyViewModel,
                         onDestinationClick = {
                             navController.navigate("${Route.PickLocation.route}/false")
                         })
@@ -268,15 +272,15 @@ fun OjekkuApps(
                 composable(
                     route = Route.Home.route
                 ) {
-                    val historyItemViewModel: HistoryItemViewModel =
-                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryItemViewModel.Factory)
+                    val historyViewModel: HistoryViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryViewModel.Factory)
                     val loginViewModel: LoginViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = LoginViewModel.Factory)
 
                     HomeScreen(
                         onCarButtonClicked = { navController.navigate(Route.Car.route) },
                         onRideButtonClicked = { navController.navigate(Route.Ride.route) },
-                        historyItemViewModel = historyItemViewModel,
+                        historyViewModel = historyViewModel,
                         onClickHistory = {
                             navController.navigate(Route.HistoryScreen.route)
                         },
@@ -287,11 +291,11 @@ fun OjekkuApps(
                 bottomSheet(
                     route = Route.HistoryScreen.route
                 ) {
-                    val historyItemViewModel: HistoryItemViewModel =
-                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryItemViewModel.Factory)
+                    val historyViewModel: HistoryViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = HistoryViewModel.Factory)
 
                     HistoryScreen(
-                        viewModel = historyItemViewModel, onClose = { navController.popBackStack() }
+                        viewModel = historyViewModel, onClose = { navController.popBackStack() }
                     )
                 }
 

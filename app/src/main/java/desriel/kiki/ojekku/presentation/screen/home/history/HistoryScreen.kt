@@ -2,11 +2,13 @@ package desriel.kiki.ojekku.presentation.screen.home.history
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,23 +22,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import desriel.kiki.core.data.source.Resource
 import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
 import desriel.kiki.ojekku.R
-import desriel.kiki.ojekku.presentation.screen.home.HistoryItemViewModel
-import desriel.kiki.ojekku.presentation.screen.home.HistoryUiState
+import desriel.kiki.ojekku.presentation.screen.home.HistoryViewModel
 import desriel.kiki.ojekku.presentation.theme.Label
 import desriel.kiki.ojekku.presentation.theme.Primary
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HistoryScreen(
-    viewModel: HistoryItemViewModel,
+    viewModel: HistoryViewModel,
     onClose: () -> Unit
 
 ) {
@@ -65,23 +66,42 @@ fun HistoryScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HistoryItemList(viewModel: HistoryItemViewModel) {
+fun HistoryItemList(viewModel: HistoryViewModel) {
     val historyData by viewModel.getUserHistoryForCurrentUser().collectAsState(initial = Resource.Loading)
 
     when (historyData) {
         is Resource.Success -> {
-            val historyEntity = (historyData as Resource.Success<HistoryEntity>).data
+            val historyEntity = (historyData as Resource.Success<List<HistoryEntity>>).data
 
-            if (historyEntity != null) { // Periksa apakah historyEntity tidak null
                 LazyColumn {
-                    items(listOf(historyEntity)) { item ->
+                    items(historyEntity) { item ->
                         ItemHistoryList(item)
-                    }
+
                 }
             }
         }
         is Resource.Error -> {
-            // Tampilkan pesan kesalahan jika diperlukan
+            Box(
+                modifier = Modifier
+                    .fillMaxSize() ,
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally, // Mengatur konten di tengah horizontal
+                    verticalArrangement = Arrangement.Center // Mengatur konten di tengah vertikal
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_activity),
+                        contentDescription = "no history"
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center, // Mengatur teks agar terpusat
+                        text = "Belum ada history \n yang tersedia"
+                    )
+                }
+            }
         }
         is Resource.Loading -> {
             // Tampilkan indikator loading jika diperlukan

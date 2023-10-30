@@ -70,17 +70,18 @@ class UserRepositoryImpl constructor(
         return dataStore.userName.map { Resource.Success(it) }
     }
 
-    override fun getUserHistory(userEmail: String): Flow<Resource<HistoryEntity>> {
-        return flow {
-            val history = dao.getUserHistory(userEmail).first()
-            if (history.isNotEmpty()) {
-                emit(Resource.Success(history.first()))
-            } else {
-                emit(Resource.Error(-1, "data history tidak tersedia"))
+    override fun getUserHistory(userEmail: String): Flow<Resource<List<HistoryEntity>>> {
+        return dao.getUserHistory(userEmail)
+            .map { historyList ->
+                if (historyList.isNotEmpty()) {
+                    Resource.Success(historyList)
+                } else {
+                    Resource.Error(-1, "Data history tidak tersedia")
+                }
             }
-        }.catch { e ->
-            emit(Resource.Error(-1, e.message ?: "Something wrong."))
-        }.flowOn(Dispatchers.IO)
-
+            .catch { e ->
+                emit(Resource.Error(-1, e.message ?: "Something wrong."))
+            }
+            .flowOn(Dispatchers.IO)
     }
 }

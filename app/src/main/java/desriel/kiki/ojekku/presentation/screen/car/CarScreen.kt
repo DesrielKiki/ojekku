@@ -40,6 +40,7 @@ import desriel.kiki.ojekku.presentation.component.OrderButton
 import desriel.kiki.ojekku.presentation.component.PointField
 import desriel.kiki.ojekku.presentation.screen.car.CarUiState
 import desriel.kiki.ojekku.presentation.screen.car.CarViewModel
+import desriel.kiki.ojekku.presentation.screen.home.HistoryViewModel
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PLACES_BUNDLE
 import desriel.kiki.ojekku.presentation.theme.Primary
 import java.time.LocalDateTime
@@ -51,7 +52,8 @@ import java.util.Locale
 @Composable
 fun CarScreen(
     saveStateHandle: SavedStateHandle?,
-    viewModel: CarViewModel,
+    carViewModel: CarViewModel,
+    historyViewModel : HistoryViewModel,
     onPickupClick: () -> Unit,
     onDestinationClick: () -> Unit,
     onOrderClick : () -> Unit
@@ -77,7 +79,7 @@ fun CarScreen(
         mutableStateListOf<LatLng>()
     }
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by carViewModel.uiState.collectAsState()
 
     LaunchedEffect(placesResult) {
         if (placesResult.locationName.isNotEmpty()) {
@@ -91,7 +93,7 @@ fun CarScreen(
 
     LaunchedEffect(pickup, destination) {
         if (pickup.locationName.isNotEmpty() && destination.locationName.isNotEmpty()) {
-            viewModel.getPlaceRoutes(
+            carViewModel.getPlaceRoutes(
                 Pair(pickup.latitude, pickup.longitude),
                 Pair(destination.latitude, destination.longitude)
             )
@@ -143,8 +145,8 @@ fun CarScreen(
                     onClickedEditButton = {}
                 )
             }
-            viewModel.carTariff?.let { tariff ->
-                viewModel.distance?.let { distance ->
+            carViewModel.carTariff?.let { tariff ->
+                carViewModel.distance?.let { distance ->
                     var formattedDateTime by remember { mutableStateOf("") }
 
                     val currentDateTime = LocalDateTime.now()
@@ -155,14 +157,15 @@ fun CarScreen(
                     OrderButton(
                         onClick = {
                             onOrderClick()
-                            viewModel.saveHistory(
+                            carViewModel.saveHistory(
+                                historyViewModel.getUserEmail(),
                                 formattedDateTime,
                                 formattedDateTime,
                                 "Car",
                                 pickup.displayName,
                                 destination.displayName,
                                 "",
-                                viewModel.carTariff!!
+                                carViewModel.carTariff!!
                             )
                         },
                         distance = distance,

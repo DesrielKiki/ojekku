@@ -38,8 +38,7 @@ import desriel.kiki.ojekku.R
 import desriel.kiki.ojekku.domain.model.PlacesModel
 import desriel.kiki.ojekku.presentation.component.OrderButton
 import desriel.kiki.ojekku.presentation.component.PointField
-import desriel.kiki.ojekku.presentation.screen.home.HistoryItemViewModel
-import desriel.kiki.ojekku.presentation.screen.home.HomeViewModel
+import desriel.kiki.ojekku.presentation.screen.home.HistoryViewModel
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PLACES_BUNDLE
 import desriel.kiki.ojekku.presentation.theme.Primary
 import java.time.LocalDateTime
@@ -52,7 +51,7 @@ import java.util.Locale
 fun RideScreen(
     saveStateHandle: SavedStateHandle?,
     rideViewModel: RideViewModel,
-    historyViewmodel: HistoryItemViewModel,
+    historyViewmodel: HistoryViewModel,
     onPickupClick: () -> Unit,
     onDestinationClick: () -> Unit,
     onOrderButtonClick: () -> Unit

@@ -38,9 +38,11 @@ class UserInteractor constructor(
         return userRepository.getUserEmail()
     }
 
-    override fun getUserHistory(userEmail: String): Flow<Resource<HistoryEntity>> {
+    override fun getUserHistory(userEmail: String): Flow<Resource<List<HistoryEntity>>> {
         return userRepository.getUserHistory(userEmail)
     }
+
+
 
     /**
      * store function

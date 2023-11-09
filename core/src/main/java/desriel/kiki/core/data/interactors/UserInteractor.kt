@@ -16,11 +16,9 @@ class UserInteractor constructor(
     override suspend fun isUserLoggedIn(): Flow<Resource<Boolean>> {
         return userRepository.isUserLoggedIn()
     }
-
     override suspend fun logout() {
         userRepository.logout()
     }
-
 
 
     /**
@@ -37,11 +35,9 @@ class UserInteractor constructor(
     override suspend fun getUserEmail(): Flow<Resource<String>> {
         return userRepository.getUserEmail()
     }
-
     override fun getUserHistory(userEmail: String): Flow<Resource<List<HistoryEntity>>> {
         return userRepository.getUserHistory(userEmail)
     }
-
 
 
     /**
@@ -51,19 +47,14 @@ class UserInteractor constructor(
     override suspend fun storeEmail(email: String) {
         userRepository.storeEmail(email)
     }
-
     override suspend fun storeUserName(userName: String) {
         userRepository.storeUserName(userName)
     }
-
     override suspend fun storeFullName(fullName: String) {
         userRepository.storeFullName(fullName)
     }
-
     override suspend fun storeHistory(data: HistoryEntity) {
         userDao.insertHistory(data)
     }
-
-
 
 }

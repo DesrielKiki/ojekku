@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.accompanist.permission)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.preference.ktx)
     testImplementation(libs.junit)
     testImplementation(libs.junit)
     implementation(libs.bundles.maps)

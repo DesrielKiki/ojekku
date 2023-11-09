@@ -10,39 +10,50 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class OjekkuDataStore constructor(
-  private val context: Context
+    private val context: Context
 ) {
 
-  private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "jeky_datastore.pb")
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "jeky_datastore.pb")
 
-  suspend fun <T> storeData(key: Preferences.Key<T>, value: T) {
-    context.dataStore.edit { pref ->
-      pref[key] = value
-    }
-  }
-
-  suspend fun clear() {
-    context.dataStore.edit { pref ->
-      pref.clear()
-    }
-  }
-
-  val email: Flow<String>
-    get() = context.dataStore.data.map { pref ->
-      pref[EMAIL] ?: ""
-    }
-  val userName: Flow<String>
-    get() = context.dataStore.data.map { pref ->
-      pref[UNAME] ?: ""
-    }
-  val fullName: Flow<String>
-    get() = context.dataStore.data.map { pref ->
-      pref[FULLNAME] ?: ""
+    suspend fun <T> storeData(key: Preferences.Key<T>, value: T) {
+        context.dataStore.edit { pref ->
+            pref[key] = value
+        }
     }
 
-  companion object {
-    val EMAIL = stringPreferencesKey("EMAIL")
-    val UNAME = stringPreferencesKey("UNAME")
-    val FULLNAME = stringPreferencesKey("FULLNAME")
-  }
+    suspend fun clear() {
+        context.dataStore.edit { pref ->
+            pref.clear()
+        }
+    }
+
+    val email: Flow<String>
+        get() = context.dataStore.data.map { pref ->
+            pref[EMAIL] ?: ""
+        }
+    val userName: Flow<String>
+        get() = context.dataStore.data.map { pref ->
+            pref[UNAME] ?: ""
+        }
+    val fullName: Flow<String>
+        get() = context.dataStore.data.map { pref ->
+            pref[FULLNAME] ?: ""
+        }
+    val selectedLanguage: Flow<String>
+        get() = context.dataStore.data.map { pref ->
+            pref[SELECTED_LANGUAGE] ?: "en" // Bahasa default jika belum ada pilihan
+        }
+
+    suspend fun setSelectedLanguage(language: String) {
+        storeData(SELECTED_LANGUAGE, language)
+    }
+
+
+    companion object {
+        val EMAIL = stringPreferencesKey("EMAIL")
+        val UNAME = stringPreferencesKey("UNAME")
+        val FULLNAME = stringPreferencesKey("FULLNAME")
+        val SELECTED_LANGUAGE = stringPreferencesKey("SELECTED_LANGUAGE")
+
+    }
 }

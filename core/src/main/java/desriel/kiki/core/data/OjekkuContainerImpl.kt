@@ -2,9 +2,11 @@ package desriel.kiki.core.data
 
 import android.content.Context
 import desriel.kiki.core.data.interactors.AuthInteractor
+import desriel.kiki.core.data.interactors.LanguageInteractor
 import desriel.kiki.core.data.interactors.PlacesInteractor
 import desriel.kiki.core.data.interactors.UserInteractor
 import desriel.kiki.core.data.repository.AuthRepositoryImpl
+import desriel.kiki.core.data.repository.LanguageRepositoryImpl
 import desriel.kiki.core.data.repository.PlacesRepositoryImpl
 import desriel.kiki.core.data.repository.UserRepositoryImpl
 import desriel.kiki.core.data.source.local.datastore.OjekkuDataStore
@@ -12,9 +14,11 @@ import desriel.kiki.core.data.source.local.room.OjekkuDatabase
 import desriel.kiki.core.data.source.remote.network.OjekkuService
 import desriel.kiki.core.domain.OjekkuContainer
 import desriel.kiki.core.domain.repository.AuthRepository
+import desriel.kiki.core.domain.repository.LanguageRepository
 import desriel.kiki.core.domain.repository.PlacesRepository
 import desriel.kiki.core.domain.repository.UserRepository
 import desriel.kiki.core.domain.usecase.AuthUseCase
+import desriel.kiki.core.domain.usecase.LanguageUseCase
 import desriel.kiki.core.domain.usecase.PlacesUseCase
 import desriel.kiki.core.domain.usecase.UserUseCase
 import okhttp3.OkHttpClient
@@ -57,6 +61,8 @@ class OjekkuContainerImpl constructor(
 
   override val placesRepository: PlacesRepository
     get() = PlacesRepositoryImpl(jekyApiService)
+  override val languageRepository: LanguageRepository
+    get() = LanguageRepositoryImpl(ojekkuDataStore)
 
   override val authUseCase: AuthUseCase
     get() = AuthInteractor(authRepository)
@@ -66,4 +72,6 @@ class OjekkuContainerImpl constructor(
 
   override val placesUseCase: PlacesUseCase
     get() = PlacesInteractor(placesRepository)
+  override val languageUseCase: LanguageUseCase
+    get() = LanguageInteractor(languageRepository)
 }

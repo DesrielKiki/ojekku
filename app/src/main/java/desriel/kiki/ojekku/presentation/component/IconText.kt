@@ -68,10 +68,3 @@ fun IconText(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun IconTextPrev() {
-    IconText(imageVector = Icons.Filled.Settings, text = "Setting") {
-
-    }
-}

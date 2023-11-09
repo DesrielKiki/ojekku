@@ -124,27 +124,27 @@ fun RegisterScreen(
             .verticalScroll(rememberScrollState())
     ) {
         TextHeader(
-            headerText = "Daftar Akun",
-            supportText = "Masukkan identitas yang diperlukan untuk dapat menikmati keseruannya"
+            headerText = stringResource(R.string.register_account),
+            supportText = stringResource(R.string.insert_require_identity)
         )
         PlainTextField(
             modifier = Modifier.padding(top = 36.dp),
-            label = "Nama Lengkap",
+            label = stringResource(R.string.full_name),
             value = fullName,
-            placeholder = "Nama Lengkap Anda",
+            placeholder = stringResource(R.string.insert_full_name),
             onValueChange = { fullName = it })
         PlainTextField(
             modifier = Modifier.padding(top = 36.dp),
-            label = "Display Name",
+            label = stringResource(R.string.display_name),
             value = userName,
-            placeholder = "Display Name Anda",
+            placeholder = stringResource(R.string.your_display_name),
             onValueChange = { userName = it })
         PlainTextField(
             modifier = Modifier.padding(top = 24.dp),
-            label = "No. HP",
+            label = stringResource(R.string.phone_number),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             value = number,
-            placeholder = "Nomor handphone anda",
+            placeholder = stringResource(R.string.your_phone_number),
             onValueChange = { number = it })
         TrailingTextField(
             modifier = Modifier.padding(top = 24.dp),
@@ -155,23 +155,23 @@ fun RegisterScreen(
                     painter = painterResource(id = R.drawable.ic_mail), contentDescription = "Email"
                 )
             },
-            label = "Email",
-            placeholder = "Masukkan Email",
+            label = stringResource(R.string.email),
+            placeholder = stringResource(R.string.insert_email),
             onValueChange = { email = it },
         )
         PasswordTextField(
             modifier = Modifier.padding(top = 24.dp),
             value = password,
-            label = "Password",
-            placeholder = "Masukkan Password",
+            label = stringResource(R.string.password),
+            placeholder = stringResource(R.string.insert_password),
             onValueChange = { password = it })
         PasswordTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp),
             value = confirmPassword,
-            label = "Konfirmasi Password",
-            placeholder = "Masukkan konfirmasi password",
+            label = stringResource(R.string.confirm_password),
+            placeholder = stringResource(R.string.insert_password_confirmation),
             onValueChange = {
                 confirmPassword = it
             }
@@ -180,7 +180,7 @@ fun RegisterScreen(
             modifier = Modifier
                 .padding(top = 60.dp)
                 .fillMaxWidth(),
-            buttonText = "Masuk",
+            buttonText = stringResource(id = R.string.register),
             enabled = isButtonEnable,
             onClick = {
                 viewModel.register(

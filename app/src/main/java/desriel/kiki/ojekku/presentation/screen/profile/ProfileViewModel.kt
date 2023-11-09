@@ -2,16 +2,17 @@ package desriel.kiki.ojekku.presentation.screen.profile
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import desriel.kiki.core.data.source.Resource
-import desriel.kiki.core.domain.usecase.AuthUseCase
+import desriel.kiki.core.domain.usecase.LanguageUseCase
 import desriel.kiki.core.domain.usecase.UserUseCase
 import desriel.kiki.ojekku.OjekkuApplication
-import desriel.kiki.ojekku.presentation.screen.login.LoginViewModel
 import kotlinx.coroutines.launch
 
 class ProfileViewModel constructor(
@@ -78,4 +79,37 @@ class ProfileViewModel constructor(
         }
     }
 
+}
+
+class LanguageViewModel(private val languageUseCase: LanguageUseCase) : ViewModel() {
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as OjekkuApplication)
+                LanguageViewModel(
+                    application.ojekkuContainer.languageUseCase
+                )
+            }
+        }
+    }
+
+    private val _selectedLanguage = MutableLiveData<String>()
+    val selectedLanguage: LiveData<String> get() = _selectedLanguage
+
+    init {
+        viewModelScope.launch {
+            val savedLanguage = languageUseCase.getSelectedLanguage()
+            _selectedLanguage.value = languageUseCase.getSelectedLanguage()
+
+        }
+    }
+
+    fun setLanguage(language: String) {
+        viewModelScope.launch {
+            languageUseCase.setSelectedLanguage(language)
+            _selectedLanguage.value = language
+        }
+    }
 }

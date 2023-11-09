@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import desriel.kiki.core.data.source.Resource
@@ -55,7 +56,6 @@ fun HomeScreen(
 ) {
 
     val usernameState by remember { loginViewModel.getUserName() }
-    Log.d("home screen", "usernamestate = $usernameState")
 
 
     Column(
@@ -65,8 +65,8 @@ fun HomeScreen(
     ) {
         Row {
             TextHeader(
-                headerText = "Selamat Datang, $usernameState",
-                supportText = "Silahkan pilih layanan yang ingin anda gunakan"
+                headerText = stringResource(R.string.welcome) + usernameState,
+                supportText = stringResource(R.string.choose_services_wanted)
             )
 
         }
@@ -127,7 +127,7 @@ fun HomeScreen(
             .clickable { onClickHistory() }
             .align(alignment = CenterHorizontally)) {
 
-            Text(text = "Riwayat Pesanan", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(id = R.string.order_history), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_right_black), // Ganti dengan ikon yang Anda inginkan
@@ -156,7 +156,6 @@ fun HistoryItemGrid(viewModel: HistoryViewModel) {
     when (historyData) {
         is Resource.Success -> {
             val historyEntity = (historyData as Resource.Success<List<HistoryEntity>>).data
-            Log.d("home screen", "history items = $historyEntity")
 
             LazyRow {
                 items(historyEntity) { item ->
@@ -167,7 +166,9 @@ fun HistoryItemGrid(viewModel: HistoryViewModel) {
 
         is Resource.Error -> {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
                 horizontalAlignment = CenterHorizontally, // Mengatur konten di tengah horizontal
                 verticalArrangement = Arrangement.Center // Mengatur konten di tengah vertical
             ) {
@@ -181,7 +182,7 @@ fun HistoryItemGrid(viewModel: HistoryViewModel) {
                     modifier = Modifier
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center, // Mengatur teks agar terpusat
-                    text = "Belum ada history \n yang tersedia"
+                    text = stringResource(R.string.no_history_available)
                 )
             }
         }

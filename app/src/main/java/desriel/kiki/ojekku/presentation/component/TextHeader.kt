@@ -32,12 +32,3 @@ fun TextHeader(
             Text(text = supportText, style = supportStyle, color = supportColor)
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun TextHeaderPreview() {
-    TextHeader(
-        headerText = "selamat Datang",
-        supportText = "Masukkan email dan password dari akun yang pernah kamu buat sebelumnya"
-    )
-}

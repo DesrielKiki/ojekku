@@ -116,15 +116,15 @@ fun LoginScreen(
     ) {
         TextHeader(
             modifier = Modifier.fillMaxWidth(),
-            headerText = "Selamat Datang",
-            supportText = "Masukkan email dan password dari akun yang pernah kamu buat sebelumnya"
+            headerText = stringResource(R.string.welcome_to_ojekku),
+            supportText = stringResource(R.string.insert_email_already_created_before)
         )
         TrailingTextField(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 36.dp),
             value = email,
             label = "Email",
-            placeholder = "Masukkan Email",
+            placeholder = stringResource(R.string.insert_email),
             trailingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_mail), contentDescription = "Email"
@@ -137,13 +137,13 @@ fun LoginScreen(
         PasswordTextField(modifier = Modifier.padding(top = 24.dp),
             value = password,
             label = "Password",
-            placeholder = "Masukkan Password",
+            placeholder = stringResource(R.string.insert_password),
             onValueChange = { password = it })
         Buttons(
             modifier = Modifier
                 .padding(top = 60.dp)
                 .fillMaxWidth(),
-            buttonText = "Masuk",
+            buttonText = stringResource(R.string.login),
             enabled = isButtonEnable,
             onClick = {
                 viewModel.login(email, password)

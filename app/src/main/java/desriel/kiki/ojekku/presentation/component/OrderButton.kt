@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -63,10 +64,13 @@ fun OrderButton(
                 .padding(vertical = 12.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Jarak : $distance", modifier = Modifier.padding(horizontal = 28.dp).padding(bottom = 4.dp))
+            Text(text = stringResource(R.string.distance) + distance, modifier = Modifier
+                .padding(horizontal = 28.dp)
+                .padding(bottom = 4.dp))
             Button(
                 modifier = modifier
-                    .padding(horizontal = 24.dp).padding(bottom = 17.dp, top = 12.dp),
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 17.dp, top = 12.dp),
                 onClick = onClick,
                 shape = shape,
                 colors = color

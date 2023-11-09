@@ -169,7 +169,7 @@ fun RideScreen(
                         },
                         distance = distance,
                         tariff = tariff,
-                        title = "Pesan Ojekku Ride"
+                        title = stringResource(R.string.order_ride)
                     )
                 }
             }

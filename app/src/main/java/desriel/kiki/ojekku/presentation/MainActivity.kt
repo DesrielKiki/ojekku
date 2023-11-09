@@ -60,6 +60,7 @@ import desriel.kiki.ojekku.presentation.screen.ride.RideScreen
 import desriel.kiki.ojekku.presentation.screen.login.LoginScreen
 import desriel.kiki.ojekku.presentation.screen.login.LoginViewModel
 import desriel.kiki.ojekku.presentation.screen.notification.NotificationScreen
+import desriel.kiki.ojekku.presentation.screen.profile.LanguageViewModel
 import desriel.kiki.ojekku.presentation.screen.profile.ProfileScreen
 import desriel.kiki.ojekku.presentation.screen.profile.ProfileViewModel
 import desriel.kiki.ojekku.presentation.screen.register.RegisterScreen
@@ -198,9 +199,12 @@ fun OjekkuApps(
                 ) {
                     val profileViewModel: ProfileViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = ProfileViewModel.Factory)
+                    val languageViewModel: LanguageViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = LanguageViewModel.Factory)
 
                     ProfileScreen(
                         profileViewModel = profileViewModel,
+                        languageViewModel = languageViewModel,
                         onLogoutClick = {
                             navController.navigate(Route.Login.route)
                         },

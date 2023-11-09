@@ -202,14 +202,3 @@ fun TextFieldIcon(
         modifier = modifier
     )
 }
-
-@Preview(showBackground = true)
-@Composable
-fun pointFieldPreview() {
-    PointField(
-        pickupValue = "",
-        destinationValue = "",
-        pickupPlaceholder = "Pilih lokasi jemput",
-        destinationPlaceholder = "Pilih lokasi tujuan"
-    )
-}

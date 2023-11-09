@@ -21,10 +21,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import desriel.kiki.ojekku.R
 import desriel.kiki.ojekku.presentation.theme.Black
 import desriel.kiki.ojekku.presentation.theme.Border
 import desriel.kiki.ojekku.presentation.theme.Icon
@@ -147,7 +149,7 @@ fun PasswordTextField(
                     shouldShowPassword = !shouldShowPassword
                 },
                 imageVector = if (shouldShowPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                contentDescription = "Hide Password"
+                contentDescription = stringResource(R.string.hide_password)
             )
         },
         visualTransformation = if (shouldShowPassword) VisualTransformation.None else PasswordVisualTransformation()

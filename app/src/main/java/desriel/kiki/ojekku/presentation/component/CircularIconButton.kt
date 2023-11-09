@@ -58,9 +58,3 @@ fun CircularIconButton(
 
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun circularButtonPrev() {
-    CircularIconButton(onClick = { /*TODO*/ }, icon = R.drawable.ic_motor, title = "Ride")
-}

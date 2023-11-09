@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import desriel.kiki.core.data.source.Resource
 import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
-import desriel.kiki.core.data.source.local.room.repository.HistoryRepository
 import desriel.kiki.core.domain.usecase.PlacesUseCase
 import desriel.kiki.core.domain.usecase.UserUseCase
 import desriel.kiki.ojekku.OjekkuApplication

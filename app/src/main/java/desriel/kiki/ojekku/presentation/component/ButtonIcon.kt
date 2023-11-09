@@ -29,9 +29,3 @@ fun ButtonWithIconAndImage(
         )
     }
 }
-
-@Preview
-@Composable
-fun buttonIconPrev() {
-    ButtonWithIconAndImage(icon = R.drawable.icon__arrow_right_, onClick = {})
-}

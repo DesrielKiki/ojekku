@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ojekku</string>
+    <string name="not_have_account">Belum punya akun?</string>
+    <string name="have_account">Sudah punya akun?</string>
+    <string name="space">" "</string>
+    <string name="register">Daftar</string>
+    <string name="login">Login</string>
+    <string name="login_title">Selamat Datang</string>
+    <string name="location_permission_message">Kamu harus mengizinkan perizinan lokasi untuk menikmati fitur maps.</string>
+    <string name="allow_permission">Beri ijin</string>
+    <string name="edit">edit</string>
+    <string name="pickup_location_txt">Pilih lokasi jemput</string>
+    <string name="destination_location_txt">Pilih lokasi tujuan</string>
+    <string name="pickup_title">Set lokasi jemput</string>
+    <string name="destination_title">Set lokasi tujuan</string>
+    <string name="Account">Akun</string>
+    <string name="payment_method">Metode Pembayaran</string>
+    <string name="order_history">Riwayat Pesanan</string>
+    <string name="Setting">Pengaturan</string>
+    <string name="language">Bahasa</string>
+    <string name="help">Bantuan</string>
+    <string name="about_application">Tentang Aplikasi</string>
+    <string name="select_language">Pilih Bahasa</string>
+    <string name="save">simpan</string>
+    <string name="distance">Jarak :</string>
+    <string name="hide_password">Sembunyikan kata sandi</string>
+    <string name="welcome">"Selamat Datang, "</string>
+    <string name="choose_services_wanted">Silahkan pilih layanan yang ingin anda gunakan</string>
+    <string name="no_history_available">Tidak ada history \n yang tersedia</string>
+    <string name="welcome_to_ojekku">Selamat datang di Ojekku</string>
+    <string name="insert_email_already_created_before">Silahkan masukkan email dan password yang sudah anda buat sebelumnya</string>
+    <string name="insert_email">Masukkan Email</string>
+    <string name="insert_password">Masukkan Password</string>
+    <string name="this_is_notification_screen">ini adalah halaman notifikasi</string>
+    <string name="logout">KELUAR</string>
+    <string name="register_account">Daftar akun baru</string>
+    <string name="insert_require_identity">Silahkan masukkan identitas yang dibutuhkan untuk menikmati layanan ojekku</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="insert_full_name">Nama lengkap anda</string>
+    <string name="display_name">Display Name</string>
+    <string name="your_display_name">Display name anda</string>
+    <string name="phone_number">Nomor handphone</string>
+    <string name="your_phone_number">Nomor handphone anda</string>
+    <string name="email">email</string>
+    <string name="password">kata sandi</string>
+    <string name="confirm_password">Konfirmasi kata sandi</string>
+    <string name="insert_password_confirmation">masukkan konfirmasi kata sandi</string>
+    <string name="order_ride">Pesan Ojekku Ride</string>
+
+</resources>

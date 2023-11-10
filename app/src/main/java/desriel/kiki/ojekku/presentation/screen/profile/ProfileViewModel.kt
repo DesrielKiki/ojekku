@@ -1,5 +1,6 @@
 package desriel.kiki.ojekku.presentation.screen.profile
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -82,6 +83,8 @@ class ProfileViewModel constructor(
 }
 
 class LanguageViewModel(private val languageUseCase: LanguageUseCase) : ViewModel() {
+    val language = mutableStateOf("")
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -95,21 +98,31 @@ class LanguageViewModel(private val languageUseCase: LanguageUseCase) : ViewMode
         }
     }
 
-    private val _selectedLanguage = MutableLiveData<String>()
-    val selectedLanguage: LiveData<String> get() = _selectedLanguage
-
     init {
-        viewModelScope.launch {
-            val savedLanguage = languageUseCase.getSelectedLanguage()
-            _selectedLanguage.value = languageUseCase.getSelectedLanguage()
+        loadSavedLanguage()
+    }
 
+    private fun loadSavedLanguage() {
+        viewModelScope.launch {
+            languageUseCase.getSavedLanguage()
+                .collect { resource ->
+                    if (resource is Resource.Success) {
+                        language.value = resource.data
+                    } else if (resource is Resource.Error) {
+                        language.value = "en"
+                    }
+                }
         }
     }
 
-    fun setLanguage(language: String) {
+    fun saveSelectedLanguage(language: String) {
         viewModelScope.launch {
-            languageUseCase.setSelectedLanguage(language)
-            _selectedLanguage.value = language
+            languageUseCase.saveSelectedLanguage(language)
         }
     }
+    fun getLanguage(): State<String>{
+        return language
+    }
+
+
 }

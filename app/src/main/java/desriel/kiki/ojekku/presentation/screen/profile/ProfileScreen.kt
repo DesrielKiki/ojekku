@@ -139,16 +139,19 @@ fun ProfileScreen(
         val context = LocalContext.current
 
         if (isLanguageSelectionDialogVisible) {
+            val initialSelectedLanguage by remember { languageViewModel.getLanguage() }
+
             LanguageSelectionDialog(
                 onLanguageSelected = { languageCode ->
                     // Panggil metode setLanguage di dalam view model
-                    languageViewModel.setLanguage(languageCode)
+                    languageViewModel.saveSelectedLanguage(languageCode)
                     LocaleManager.setLocale(context, languageCode) // Mengatur bahasa aplikasi
                     isLanguageSelectionDialogVisible = false
                 },
                 dismissDialog = {
                     isLanguageSelectionDialogVisible = false
-                }
+                },
+                initialSelectedLanguage = initialSelectedLanguage
             )
         }
 

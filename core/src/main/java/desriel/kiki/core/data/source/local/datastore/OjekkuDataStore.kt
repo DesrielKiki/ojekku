@@ -1,6 +1,7 @@
 package desriel.kiki.core.data.source.local.datastore
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -16,6 +17,7 @@ class OjekkuDataStore constructor(
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "jeky_datastore.pb")
 
     suspend fun <T> storeData(key: Preferences.Key<T>, value: T) {
+        Log.d("ojekku datastore", "berhasil menyimpan dengan key $key yang ber value $value")
         context.dataStore.edit { pref ->
             pref[key] = value
         }
@@ -39,14 +41,15 @@ class OjekkuDataStore constructor(
         get() = context.dataStore.data.map { pref ->
             pref[FULLNAME] ?: ""
         }
+    val savedLanguage : Flow<String>
+        get() = context.dataStore.data.map { pref ->
+            pref[SELECTED_LANGUAGE]?: "en"
+        }
     val selectedLanguage: Flow<String>
         get() = context.dataStore.data.map { pref ->
             pref[SELECTED_LANGUAGE] ?: "en" // Bahasa default jika belum ada pilihan
         }
 
-    suspend fun setSelectedLanguage(language: String) {
-        storeData(SELECTED_LANGUAGE, language)
-    }
 
 
     companion object {

@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -37,6 +38,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -61,6 +63,7 @@ import desriel.kiki.ojekku.presentation.screen.login.LoginScreen
 import desriel.kiki.ojekku.presentation.screen.login.LoginViewModel
 import desriel.kiki.ojekku.presentation.screen.notification.NotificationScreen
 import desriel.kiki.ojekku.presentation.screen.profile.LanguageViewModel
+import desriel.kiki.ojekku.presentation.screen.profile.LocaleManager
 import desriel.kiki.ojekku.presentation.screen.profile.ProfileScreen
 import desriel.kiki.ojekku.presentation.screen.profile.ProfileViewModel
 import desriel.kiki.ojekku.presentation.screen.register.RegisterScreen
@@ -71,6 +74,7 @@ import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PLACES_BUNDLE
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PickLocationBottomSheet
 import desriel.kiki.ojekku.presentation.screen.ride.pick_location.PickLocationViewModel
 import desriel.kiki.ojekku.presentation.theme.OjekkuTheme
+import java.util.Locale
 
 data class BottomNavigationItem(
     val title: String,
@@ -81,6 +85,7 @@ data class BottomNavigationItem(
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels { MainViewModel.Factory }
+    private val languageViewModel: LanguageViewModel by viewModels { LanguageViewModel.Factory }
 
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -94,7 +99,7 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             OjekkuTheme {
-                OjekkuApps(viewModel)
+                OjekkuApps(viewModel, languageViewModel)
             }
         }
 
@@ -110,8 +115,19 @@ class MainActivity : ComponentActivity() {
 )
 @Composable
 fun OjekkuApps(
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    languageViewModel: LanguageViewModel
+
 ) {
+    val language by remember { languageViewModel.getLanguage() }
+
+    val selectedLanguageCode =
+        if (language == "en") "en" else "id" // Sesuaikan dengan kode bahasa yang sesuai\
+
+    val context = LocalContext.current
+    LocaleManager.setLocale(context, selectedLanguageCode) // Mengatur bahasa aplikasi
+
+
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden, skipHalfExpanded = true
     )
@@ -245,7 +261,7 @@ fun OjekkuApps(
                             navController.navigate("${Route.PickLocation.route}/false")
                         },
                         historyViewmodel = historyVIewmodel
-                        )
+                    )
                 }
                 composable(
                     route = Route.Notification.route

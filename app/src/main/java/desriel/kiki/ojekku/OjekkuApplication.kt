@@ -8,9 +8,7 @@ import desriel.kiki.ojekku.presentation.screen.profile.LocaleManager
 
 class OjekkuApplication : Application() {
 
-    lateinit var ojekkuContainer : OjekkuContainer
-
-
+    lateinit var ojekkuContainer: OjekkuContainer
 
 
     override fun onCreate() {

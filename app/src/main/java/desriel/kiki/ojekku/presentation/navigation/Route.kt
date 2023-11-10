@@ -12,4 +12,6 @@ sealed class Route(val route : String){
     object HistoryScreen : Route ("history")
     object Profile : Route("Profile")
     object Notification : Route ("Notification")
+    object MainScreen : Route ("Main-Screen")
+    object LoginRegister : Route ("LoginRegister")
 }

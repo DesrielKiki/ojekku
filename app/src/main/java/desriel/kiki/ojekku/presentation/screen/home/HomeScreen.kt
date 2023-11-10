@@ -57,7 +57,6 @@ fun HomeScreen(
 
     val usernameState by remember { loginViewModel.getUserName() }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()

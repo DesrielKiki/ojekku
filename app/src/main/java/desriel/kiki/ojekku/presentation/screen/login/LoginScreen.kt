@@ -28,16 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import desriel.kiki.ojekku.R
 import desriel.kiki.ojekku.domain.model.EmptyStateModel
 import desriel.kiki.ojekku.presentation.component.Buttons
 import desriel.kiki.ojekku.presentation.component.PasswordTextField
 import desriel.kiki.ojekku.presentation.component.TextHeader
 import desriel.kiki.ojekku.presentation.component.TrailingTextField
-import desriel.kiki.ojekku.presentation.navigation.Route
 import desriel.kiki.ojekku.presentation.theme.Black
 import desriel.kiki.ojekku.presentation.theme.Primary
 
@@ -45,7 +42,7 @@ import desriel.kiki.ojekku.presentation.theme.Primary
 fun LoginScreen(
     viewModel: LoginViewModel,
     onNavigateToRegister: () -> Unit,
-    onNavigateToHome: () -> Unit,
+    onSuccessLogin: () -> Unit,
     onLoginError: (EmptyStateModel) -> Unit
 
 ) {
@@ -87,7 +84,7 @@ fun LoginScreen(
                 viewModel.storeEmail((uiState as LoginUiState.Success).data.email)
                 viewModel.storeUserName((uiState as LoginUiState.Success).data.userName)
                 viewModel.storeFullName((uiState as LoginUiState.Success).data.fullName)
-                onNavigateToHome.invoke()
+                onSuccessLogin.invoke()
             }
 
             is LoginUiState.Error -> {

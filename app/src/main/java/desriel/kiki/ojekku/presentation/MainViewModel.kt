@@ -56,5 +56,8 @@ class MainViewModel constructor(
             }
         }
     }
-
+    fun setIsUserLoggedIn(isLoggedIn: Boolean) {
+        _isUserLoggedIn.value = isLoggedIn
+        Log.d("main viewmodel","current userlogin value = $_isUserLoggedIn")
+    }
 }

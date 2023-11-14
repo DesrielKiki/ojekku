@@ -27,51 +27,51 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class OjekkuContainerImpl constructor(
-  private val context: Context
+    private val context: Context
 ) : OjekkuContainer {
 
-  private val ojekkuDatabase: OjekkuDatabase by lazy {
-    OjekkuDatabase.getInstance(context)
-  }
+    private val ojekkuDatabase: OjekkuDatabase by lazy {
+        OjekkuDatabase.getInstance(context)
+    }
 
-  private val ojekkuDataStore: OjekkuDataStore by lazy {
-    OjekkuDataStore(context)
-  }
+    private val ojekkuDataStore: OjekkuDataStore by lazy {
+        OjekkuDataStore(context)
+    }
 
-  private fun retrofitClient(): OkHttpClient {
-    val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    return OkHttpClient.Builder().addInterceptor(logging).build()
-  }
+    private fun retrofitClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        return OkHttpClient.Builder().addInterceptor(logging).build()
+    }
 
-  private val retrofitPlaces: Retrofit = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl("https://places.googleapis.com")
-    .client(retrofitClient())
-    .build()
+    private val retrofitPlaces: Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl("https://places.googleapis.com")
+        .client(retrofitClient())
+        .build()
 
-  private val jekyApiService: OjekkuService by lazy {
-    retrofitPlaces.create(OjekkuService::class.java)
-  }
+    private val jekyApiService: OjekkuService by lazy {
+        retrofitPlaces.create(OjekkuService::class.java)
+    }
 
-  override val authRepository: AuthRepository
-    get() = AuthRepositoryImpl(ojekkuDatabase.userDao())
+    override val authRepository: AuthRepository
+        get() = AuthRepositoryImpl(ojekkuDatabase.userDao())
 
-  override val userRepository: UserRepository
-    get() = UserRepositoryImpl(ojekkuDataStore, ojekkuDatabase.userDao())
+    override val userRepository: UserRepository
+        get() = UserRepositoryImpl(ojekkuDataStore, ojekkuDatabase.userDao())
 
-  override val placesRepository: PlacesRepository
-    get() = PlacesRepositoryImpl(jekyApiService)
-  override val languageRepository: LanguageRepository
-    get() = LanguageRepositoryImpl(ojekkuDataStore)
+    override val placesRepository: PlacesRepository
+        get() = PlacesRepositoryImpl(jekyApiService)
+    override val languageRepository: LanguageRepository
+        get() = LanguageRepositoryImpl(ojekkuDataStore)
 
-  override val authUseCase: AuthUseCase
-    get() = AuthInteractor(authRepository)
+    override val authUseCase: AuthUseCase
+        get() = AuthInteractor(authRepository)
 
-  override val userUseCase: UserUseCase
-    get() = UserInteractor(userRepository, ojekkuDatabase.userDao())
+    override val userUseCase: UserUseCase
+        get() = UserInteractor(userRepository, ojekkuDatabase.userDao())
 
-  override val placesUseCase: PlacesUseCase
-    get() = PlacesInteractor(placesRepository)
-  override val languageUseCase: LanguageUseCase
-    get() = LanguageInteractor(languageRepository)
+    override val placesUseCase: PlacesUseCase
+        get() = PlacesInteractor(placesRepository)
+    override val languageUseCase: LanguageUseCase
+        get() = LanguageInteractor(languageRepository)
 }

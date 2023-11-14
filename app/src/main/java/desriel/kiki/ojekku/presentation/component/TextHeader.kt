@@ -3,15 +3,12 @@ package desriel.kiki.ojekku.presentation.component
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import desriel.kiki.ojekku.presentation.theme.Black
 import desriel.kiki.ojekku.presentation.theme.Label
@@ -29,6 +26,6 @@ fun TextHeader(
     Column(modifier = modifier) {
         Text(text = headerText, style = headerStyle, color = headerColor)
         Spacer(modifier = Modifier.height(10.dp))
-            Text(text = supportText, style = supportStyle, color = supportColor)
+        Text(text = supportText, style = supportStyle, color = supportColor)
     }
 }

@@ -2,18 +2,12 @@ package desriel.kiki.ojekku.presentation.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
@@ -23,13 +17,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import desriel.kiki.ojekku.R
@@ -41,7 +33,7 @@ fun OrderButton(
     modifier: Modifier = Modifier,
     @DrawableRes icon: Int = R.drawable.icon__arrow_right_,
     title: String = "",
-    distance : String = "",
+    distance: String = "",
     tariff: String = "",
     elevation: Dp = 15.dp,
     shape: Shape = RoundedCornerShape(32.dp),
@@ -51,7 +43,7 @@ fun OrderButton(
         containerColor = Primary
     ),
 
-) {
+    ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -64,9 +56,11 @@ fun OrderButton(
                 .padding(vertical = 12.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = stringResource(R.string.distance) + distance, modifier = Modifier
-                .padding(horizontal = 28.dp)
-                .padding(bottom = 4.dp))
+            Text(
+                text = stringResource(R.string.distance) + distance, modifier = Modifier
+                    .padding(horizontal = 28.dp)
+                    .padding(bottom = 4.dp)
+            )
             Button(
                 modifier = modifier
                     .padding(horizontal = 24.dp)

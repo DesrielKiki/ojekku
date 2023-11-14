@@ -11,22 +11,24 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao {
 
 
-  /**
-  insert function
-   */
+    /**
+    insert function
+     */
 
-  @Insert
-  suspend fun insertUser(userEntity: UserEntity)
-  @Insert
-  suspend fun insertHistory(historyEntity: HistoryEntity)
+    @Insert
+    suspend fun insertUser(userEntity: UserEntity)
 
-  /**
-   get function
-   */
-  @Query("SELECT * FROM user WHERE email = :email AND password = :password")
-  fun getUserByEmailAndPassword(email: String, password: String): Flow<List<UserEntity>>
-  @Query("SELECT * FROM history_table WHERE userEmail = :userEmail")
-  fun getUserHistory(userEmail: String): Flow<List<HistoryEntity>>
+    @Insert
+    suspend fun insertHistory(historyEntity: HistoryEntity)
+
+    /**
+    get function
+     */
+    @Query("SELECT * FROM user WHERE email = :email AND password = :password")
+    fun getUserByEmailAndPassword(email: String, password: String): Flow<List<UserEntity>>
+
+    @Query("SELECT * FROM history_table WHERE userEmail = :userEmail")
+    fun getUserHistory(userEmail: String): Flow<List<HistoryEntity>>
 
 
 }

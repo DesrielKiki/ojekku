@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface PlacesRepository {
-  suspend fun getPlaces(keyword: String): Flow<Resource<PlacesResponse>>
-  suspend fun getPlacesRoute(origin: String, destination: String): Flow<Resource<GetPlacesRoutesResponse>>
+    suspend fun getPlaces(keyword: String): Flow<Resource<PlacesResponse>>
+    suspend fun getPlacesRoute(
+        origin: String,
+        destination: String
+    ): Flow<Resource<GetPlacesRoutesResponse>>
 }

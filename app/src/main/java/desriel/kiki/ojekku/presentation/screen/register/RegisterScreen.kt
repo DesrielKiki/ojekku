@@ -82,7 +82,7 @@ fun RegisterScreen(
     val isButtonEnable by remember {
         derivedStateOf {
             fullName.trim().isNotEmpty() &&
-                    userName.trim().isNotEmpty()&&
+                    userName.trim().isNotEmpty() &&
                     number.trim().isNotEmpty() &&
                     email.trim().isNotEmpty() &&
                     password.trim().isNotEmpty() &&
@@ -184,7 +184,7 @@ fun RegisterScreen(
             enabled = isButtonEnable,
             onClick = {
                 viewModel.register(
-                    User(email, password, fullName,userName, number,)
+                    User(email, password, fullName, userName, number)
                 )
             }
         )

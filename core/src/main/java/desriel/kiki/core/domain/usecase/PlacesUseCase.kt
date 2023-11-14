@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface PlacesUseCase {
-  suspend fun getPlaces(keyword: String): Flow<Resource<PlacesResponse?>>
-  suspend fun getPlaceRoutes(origin: String, destination: String): Flow<Resource<GetPlacesRoutesResponse>>
+    suspend fun getPlaces(keyword: String): Flow<Resource<PlacesResponse?>>
+    suspend fun getPlaceRoutes(
+        origin: String,
+        destination: String
+    ): Flow<Resource<GetPlacesRoutesResponse>>
 }

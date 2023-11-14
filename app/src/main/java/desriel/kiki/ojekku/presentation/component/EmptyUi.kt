@@ -16,46 +16,51 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 
 
-@Composable fun EmptyUi(
-  modifier: Modifier,
-  @RawRes animationResource: Int,
-  title: String,
-  description: String,
-  buttonText: String,
-  onButtonClick: () -> Unit
+@Composable
+fun EmptyUi(
+    modifier: Modifier,
+    @RawRes animationResource: Int,
+    title: String,
+    description: String,
+    buttonText: String,
+    onButtonClick: () -> Unit
 ) {
 
-  Column(
-    modifier = modifier
-  ) {
-    val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(animationResource))
-    LottieAnimation(
-      composition = lottieComposition,
-      iterations = LottieConstants.IterateForever,
-      contentScale = ContentScale.FillHeight,
-      modifier = Modifier
-        .fillMaxWidth()
-        .sizeIn(maxHeight = 250.dp)
-        .padding(top = 60.dp)
-        .padding(horizontal = 24.dp)
-    )
-    TextHeader(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 24.dp)
-        .padding(top = 36.dp),
-      headerText = title,
-      supportText = description
-    )
-    Buttons(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 24.dp)
-        .padding(top = 36.dp, bottom = 24.dp),
-      buttonText = buttonText
+    Column(
+        modifier = modifier
     ) {
-      onButtonClick.invoke()
+        val lottieComposition by rememberLottieComposition(
+            spec = LottieCompositionSpec.RawRes(
+                animationResource
+            )
+        )
+        LottieAnimation(
+            composition = lottieComposition,
+            iterations = LottieConstants.IterateForever,
+            contentScale = ContentScale.FillHeight,
+            modifier = Modifier
+              .fillMaxWidth()
+              .sizeIn(maxHeight = 250.dp)
+              .padding(top = 60.dp)
+              .padding(horizontal = 24.dp)
+        )
+        TextHeader(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 24.dp)
+              .padding(top = 36.dp),
+            headerText = title,
+            supportText = description
+        )
+        Buttons(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 24.dp)
+              .padding(top = 36.dp, bottom = 24.dp),
+            buttonText = buttonText
+        ) {
+            onButtonClick.invoke()
+        }
     }
-  }
 
 }

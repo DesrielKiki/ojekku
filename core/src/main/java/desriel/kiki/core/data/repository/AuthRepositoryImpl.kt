@@ -3,10 +3,10 @@ package desriel.kiki.core.data.repository
 import android.database.sqlite.SQLiteConstraintException
 import desriel.kiki.core.data.source.Resource
 import desriel.kiki.core.data.source.local.room.dao.UserDao
+import desriel.kiki.core.data.source.local.room.entity.toDomain
 import desriel.kiki.core.domain.model.User
 import desriel.kiki.core.domain.model.toEntity
 import desriel.kiki.core.domain.repository.AuthRepository
-import desriel.kiki.core.data.source.local.room.entity.toDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

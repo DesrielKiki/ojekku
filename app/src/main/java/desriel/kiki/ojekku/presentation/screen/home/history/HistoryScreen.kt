@@ -67,23 +67,25 @@ fun HistoryScreen(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HistoryItemList(viewModel: HistoryViewModel) {
-    val historyData by viewModel.getUserHistoryForCurrentUser().collectAsState(initial = Resource.Loading)
+    val historyData by viewModel.getUserHistoryForCurrentUser()
+        .collectAsState(initial = Resource.Loading)
 
     when (historyData) {
         is Resource.Success -> {
             val historyEntity = (historyData as Resource.Success<List<HistoryEntity>>).data
 
-                LazyColumn {
-                    items(historyEntity) { item ->
-                        ItemHistoryList(item)
+            LazyColumn {
+                items(historyEntity) { item ->
+                    ItemHistoryList(item)
 
                 }
             }
         }
+
         is Resource.Error -> {
             Box(
                 modifier = Modifier
-                    .fillMaxSize() ,
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
@@ -103,9 +105,11 @@ fun HistoryItemList(viewModel: HistoryViewModel) {
                 }
             }
         }
+
         is Resource.Loading -> {
             // Tampilkan indikator loading jika diperlukan
         }
+
         else -> {}
     }
 }

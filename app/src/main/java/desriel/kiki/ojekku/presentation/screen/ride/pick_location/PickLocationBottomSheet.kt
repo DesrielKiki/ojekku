@@ -3,7 +3,6 @@ package desriel.kiki.ojekku.presentation.screen.ride.pick_location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -43,7 +42,6 @@ import desriel.kiki.ojekku.presentation.component.PointField
 import desriel.kiki.ojekku.presentation.theme.Border
 import desriel.kiki.ojekku.presentation.theme.LightGray
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter

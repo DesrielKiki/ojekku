@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel constructor(
     private val userUseCase: UserUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _isUserLoggedIn = MutableStateFlow<Boolean?>(null)
     val isUserLoggedIn: StateFlow<Boolean?> get() = _isUserLoggedIn
@@ -28,7 +28,8 @@ class MainViewModel constructor(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as OjekkuApplication)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as OjekkuApplication)
                 MainViewModel(application.ojekkuContainer.userUseCase)
             }
         }
@@ -49,15 +50,18 @@ class MainViewModel constructor(
                         true
                     }
                 }
+
                 is Resource.Error -> {
                     Log.d("Get Is User Logged In", "Error: ${result.message}")
                 }
+
                 else -> Unit
             }
         }
     }
+
     fun setIsUserLoggedIn(isLoggedIn: Boolean) {
         _isUserLoggedIn.value = isLoggedIn
-        Log.d("main viewmodel","current userlogin value = $_isUserLoggedIn")
+        Log.d("main viewmodel", "current userlogin value = $_isUserLoggedIn")
     }
 }

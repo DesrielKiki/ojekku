@@ -53,10 +53,10 @@ import java.util.Locale
 fun CarScreen(
     saveStateHandle: SavedStateHandle?,
     carViewModel: CarViewModel,
-    historyViewModel : HistoryViewModel,
+    historyViewModel: HistoryViewModel,
     onPickupClick: () -> Unit,
     onDestinationClick: () -> Unit,
-    onOrderClick : () -> Unit
+    onOrderClick: () -> Unit
 ) {
 
     val locationPermissionState = rememberMultiplePermissionsState(

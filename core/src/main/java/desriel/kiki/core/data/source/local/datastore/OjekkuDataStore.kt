@@ -41,15 +41,14 @@ class OjekkuDataStore constructor(
         get() = context.dataStore.data.map { pref ->
             pref[FULLNAME] ?: ""
         }
-    val savedLanguage : Flow<String>
+    val savedLanguage: Flow<String>
         get() = context.dataStore.data.map { pref ->
-            pref[SELECTED_LANGUAGE]?: "en"
+            pref[SELECTED_LANGUAGE] ?: "en"
         }
     val selectedLanguage: Flow<String>
         get() = context.dataStore.data.map { pref ->
             pref[SELECTED_LANGUAGE] ?: "en" // Bahasa default jika belum ada pilihan
         }
-
 
 
     companion object {

@@ -9,7 +9,7 @@ interface UserRepository {
     suspend fun isUserLoggedIn(): Flow<Resource<Boolean>>
     suspend fun storeEmail(email: String)
     suspend fun storeUserName(userName: String)
-    suspend fun storeHistory(data : HistoryEntity)
+    suspend fun storeHistory(data: HistoryEntity)
 
     suspend fun storeFullName(fullName: String)
 

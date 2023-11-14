@@ -15,17 +15,17 @@ interface UserUseCase {
      * store function
      **/
     suspend fun storeEmail(email: String)
-    suspend fun storeUserName(userName : String)
-    suspend fun storeFullName(fullName : String)
-    suspend fun storeHistory(data : HistoryEntity)
+    suspend fun storeUserName(userName: String)
+    suspend fun storeFullName(fullName: String)
+    suspend fun storeHistory(data: HistoryEntity)
 
     /**
      * get function
      **/
 
     suspend fun getUserName(): Flow<Resource<String>>
-    suspend fun getFullName() : Flow<Resource<String>>
-    suspend fun getUserEmail() : Flow<Resource<String>>
+    suspend fun getFullName(): Flow<Resource<String>>
+    suspend fun getUserEmail(): Flow<Resource<String>>
     fun getUserHistory(userEmail: String): Flow<Resource<List<HistoryEntity>>>
 
 

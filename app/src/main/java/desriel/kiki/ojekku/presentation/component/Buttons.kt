@@ -19,7 +19,7 @@ import desriel.kiki.ojekku.presentation.theme.Primary
 fun Buttons(
     modifier: Modifier,
     buttonText: String,
-    buttonTextStyle : TextStyle = MaterialTheme.typography.labelMedium,
+    buttonTextStyle: TextStyle = MaterialTheme.typography.labelMedium,
     enabled: Boolean = true,
     shape: Shape = RoundedCornerShape(15.dp),
     color: ButtonColors = ButtonDefaults.buttonColors(

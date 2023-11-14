@@ -70,7 +70,7 @@ fun LoginScreen(
     val isButtonEnable by remember {
         derivedStateOf {
             email.trim().isNotEmpty() &&
-            password.trim().isNotEmpty()
+                    password.trim().isNotEmpty()
         }
     }
 

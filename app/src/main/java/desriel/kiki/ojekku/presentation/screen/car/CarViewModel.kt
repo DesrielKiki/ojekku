@@ -111,15 +111,16 @@ class CarViewModel constructor(
 
         return format.format(amount).replace("IDR", "Rp.").replace(",00", ",-")
     }
+
     fun saveHistory(
-        userEmail : String,
-        orderTime : String,
-        finishTime  : String,
-        orderType : String,
-        pickLocation : String,
-        destinationLocation : String,
+        userEmail: String,
+        orderTime: String,
+        finishTime: String,
+        orderType: String,
+        pickLocation: String,
+        destinationLocation: String,
         description: String,
-        tariff : String
+        tariff: String
     ) {
         viewModelScope.launch {
             _historyUiState.emit(HistoryUiState.Loading)

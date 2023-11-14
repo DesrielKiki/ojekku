@@ -12,11 +12,9 @@ import desriel.kiki.core.domain.usecase.PlacesUseCase
 import desriel.kiki.core.domain.usecase.UserUseCase
 import desriel.kiki.ojekku.OjekkuApplication
 import desriel.kiki.ojekku.presentation.screen.home.HistoryUiState
-import desriel.kiki.ojekku.presentation.screen.register.RegisterUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
@@ -25,8 +23,8 @@ import java.util.Locale
 
 class RideViewModel constructor(
     private val placesUseCase: PlacesUseCase,
-    private val userUseCase : UserUseCase
-    ) : ViewModel() {
+    private val userUseCase: UserUseCase
+) : ViewModel() {
 
 
     private val _uiState = MutableStateFlow<RideUiState>(RideUiState.Idle)
@@ -36,6 +34,7 @@ class RideViewModel constructor(
 
     var rideTariff: String? = null
     var distance: String? = null
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -110,14 +109,14 @@ class RideViewModel constructor(
     }
 
     fun saveHistory(
-        userEmail : String,
-        orderTime : String,
-        finishTime  : String,
-        orderType : String,
-        pickLocation : String,
-        destinationLocation : String,
+        userEmail: String,
+        orderTime: String,
+        finishTime: String,
+        orderType: String,
+        pickLocation: String,
+        destinationLocation: String,
         description: String,
-        tariff : String
+        tariff: String
     ) {
         viewModelScope.launch {
             _historyUiState.emit(HistoryUiState.Loading)

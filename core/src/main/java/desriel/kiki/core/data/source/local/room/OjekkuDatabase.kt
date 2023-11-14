@@ -9,36 +9,35 @@ import desriel.kiki.core.data.source.local.room.entity.HistoryEntity
 import desriel.kiki.core.data.source.local.room.entity.UserEntity
 
 
-
 @Database(
-  entities = [UserEntity::class, HistoryEntity::class],
-  version = 4,
-  exportSchema = false
+    entities = [UserEntity::class, HistoryEntity::class],
+    version = 4,
+    exportSchema = false
 )
-abstract class OjekkuDatabase: RoomDatabase() {
+abstract class OjekkuDatabase : RoomDatabase() {
 
-  abstract fun userDao(): UserDao
+    abstract fun userDao(): UserDao
 
-  companion object {
-    @Volatile
-    private var INSTANCE: OjekkuDatabase? = null
-    fun getInstance(context: Context): OjekkuDatabase {
-      synchronized(this) {
-        var instance = INSTANCE
-        if (instance == null) {
-          val dbBuilder = Room.databaseBuilder(
-            context.applicationContext,
-            OjekkuDatabase::class.java,
-            "ojekku_database"
-          )
-            .fallbackToDestructiveMigration()
+    companion object {
+        @Volatile
+        private var INSTANCE: OjekkuDatabase? = null
+        fun getInstance(context: Context): OjekkuDatabase {
+            synchronized(this) {
+                var instance = INSTANCE
+                if (instance == null) {
+                    val dbBuilder = Room.databaseBuilder(
+                        context.applicationContext,
+                        OjekkuDatabase::class.java,
+                        "ojekku_database"
+                    )
+                        .fallbackToDestructiveMigration()
 
-          instance = dbBuilder.build()
-          INSTANCE = instance
+                    instance = dbBuilder.build()
+                    INSTANCE = instance
+                }
+
+                return instance
+            }
         }
-
-        return instance
-      }
     }
-  }
 }

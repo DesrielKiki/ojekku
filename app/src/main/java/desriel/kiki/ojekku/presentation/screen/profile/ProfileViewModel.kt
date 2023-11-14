@@ -1,10 +1,7 @@
 package desriel.kiki.ojekku.presentation.screen.profile
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -120,7 +117,8 @@ class LanguageViewModel(private val languageUseCase: LanguageUseCase) : ViewMode
             languageUseCase.saveSelectedLanguage(language)
         }
     }
-    fun getLanguage(): State<String>{
+
+    fun getLanguage(): State<String> {
         return language
     }
 

@@ -1,7 +1,6 @@
 package desriel.kiki.ojekku.presentation.screen.home
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -126,7 +125,10 @@ fun HomeScreen(
             .clickable { onClickHistory() }
             .align(alignment = CenterHorizontally)) {
 
-            Text(text = stringResource(id = R.string.order_history), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = stringResource(id = R.string.order_history),
+                style = MaterialTheme.typography.titleMedium
+            )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_right_black), // Ganti dengan ikon yang Anda inginkan

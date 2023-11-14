@@ -9,5 +9,8 @@ import desriel.kiki.ojekku.R
 
 @Composable
 fun NotificationScreen() {
-    Text(text = stringResource(R.string.this_is_notification_screen), modifier = Modifier.fillMaxSize())
+    Text(
+        text = stringResource(R.string.this_is_notification_screen),
+        modifier = Modifier.fillMaxSize()
+    )
 }

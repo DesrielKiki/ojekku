@@ -2,23 +2,17 @@ package desriel.kiki.ojekku.presentation.screen.login
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import desriel.kiki.core.data.source.Resource
 import desriel.kiki.core.domain.usecase.AuthUseCase
 import desriel.kiki.core.domain.usecase.UserUseCase
 import desriel.kiki.ojekku.OjekkuApplication
-import desriel.kiki.ojekku.presentation.MainViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class LoginViewModel constructor(
